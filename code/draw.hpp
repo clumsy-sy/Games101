@@ -4,10 +4,10 @@
 
 #ifndef DRAW_HPP
 #define DRAW_HPP
-namespace draw{
+namespace draw {
 class graphics {
 public:
   static auto draw_two_triangle(int argc, const char **argv) -> int;
 };
-}
+} // namespace draw
 #endif
