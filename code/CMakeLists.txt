@@ -7,5 +7,5 @@ set(CMAKE_CXX_STANDARD 20)
 
 include_directories(/usr/local/include)
 
-add_executable(Rasterizer main.cpp draw_triangle.cpp matrix.cpp rasterizer.hpp rasterizer.cpp  Triangle.hpp Triangle.cpp)
+add_executable(Rasterizer main.cpp OBJ_Loader.hpp Triangle.hpp Triangle.cpp Texture.hpp Texture.cpp Shader.hpp Shader.cpp  rasterizer.hpp rasterizer.cpp matrix.hpp matrix.cpp draw.hpp draw_triangle.cpp)
 target_link_libraries(Rasterizer ${OpenCV_LIBRARIES})

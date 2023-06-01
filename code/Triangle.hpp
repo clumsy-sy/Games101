@@ -24,9 +24,9 @@ public:
   // Texture *tex;
   Triangle();
 
-  [[nodiscard]] auto a() const -> Eigen::Vector3f;
-  [[nodiscard]] auto b() const -> Eigen::Vector3f;
-  [[nodiscard]] auto c() const -> Eigen::Vector3f;
+  [[nodiscard]] auto a() const -> Eigen::Vector4f;
+  [[nodiscard]] auto b() const -> Eigen::Vector4f;
+  [[nodiscard]] auto c() const -> Eigen::Vector4f;
 
   void setVertex(int ind, Vector4f ver); /*set i-th vertex coordinates */
   void setNormal(int ind, Vector3f n);   /*set i-th vertex normal vector*/

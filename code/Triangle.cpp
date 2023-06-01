@@ -20,9 +20,9 @@ Triangle::Triangle() {
   tex_coords[2] << 0.0, 0.0;
 }
 
-inline auto Triangle::a() const -> Eigen::Vector3f { return v[0]; }
-inline auto Triangle::b() const -> Eigen::Vector3f { return v[1]; }
-inline auto Triangle::c() const -> Eigen::Vector3f { return v[2]; }
+inline auto Triangle::a() const -> Eigen::Vector4f { return v[0]; }
+inline auto Triangle::b() const -> Eigen::Vector4f { return v[1]; }
+inline auto Triangle::c() const -> Eigen::Vector4f { return v[2]; }
 
 void Triangle::setVertex(int ind, Vector4f ver) { v[ind] = std::move(ver); }
 
