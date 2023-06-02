@@ -94,6 +94,7 @@ public:
       std::function<Eigen::Vector3f(fragment_shader_payload)> frag_shader);
   // set a pixel
   void set_pixel(const Eigen::Vector3f &point, const Eigen::Vector3f &color);
+  void set_pixel(const Vector2i &point, const Eigen::Vector3f &color);
   // clear buffer
   void clear(Buffers buff);
   // draw

@@ -6,6 +6,7 @@
 #include "Triangle.hpp"
 #include "matrix.hpp"
 #include "rasterizer.hpp"
+#include <system_error>
 
 auto vertex_shader(const vertex_shader_payload &payload) -> Eigen::Vector3f {
   return payload.position;
@@ -42,13 +43,16 @@ auto texture_fragment_shader(const fragment_shader_payload &payload)
     return_color = payload.texture->getColor(payload.tex_coords.x(),
                                              payload.tex_coords.y());
   }
-  Eigen::Vector3f texture_color;
-  texture_color << return_color.x(), return_color.y(), return_color.z();
-
+  auto texture_color = Vector3f(return_color);
+  /*
+    k_a: ambient coefficient 环境光追系数
+    k_d: diffuse coefficient 扩散系数
+    k_s: specular coefficient 镜面反射系数
+  */
   Eigen::Vector3f ka = Eigen::Vector3f(0.005, 0.005, 0.005);
   Eigen::Vector3f kd = texture_color / 255.f;
   Eigen::Vector3f ks = Eigen::Vector3f(0.7937, 0.7937, 0.7937);
-
+  // 两个光源
   auto l1 = light{{20, 20, 20}, {500, 500, 500}};
   auto l2 = light{{-20, 20, 0}, {500, 500, 500}};
 
@@ -56,14 +60,15 @@ auto texture_fragment_shader(const fragment_shader_payload &payload)
   Eigen::Vector3f amb_light_intensity{10, 10, 10};
   Eigen::Vector3f eye_pos{0, 0, 10};
 
-  float p = 150;
+  float p = 150; // 幂次系数
 
-  Eigen::Vector3f color = texture_color;
   Eigen::Vector3f point = payload.view_pos;
   Eigen::Vector3f normal = payload.normal;
 
   Eigen::Vector3f result_color = {0, 0, 0};
-
+  /*
+    对于所有的光源，都要计算对应的 ambient（环境光照）diffuse（漫反射） specular（高光）
+  */
   for (auto &light : lights) {
     // TODO: For each light source in the code, calculate what the *ambient*,
     // *diffuse*, and *specular* components are. Then, accumulate that result on
@@ -76,10 +81,13 @@ auto texture_fragment_shader(const fragment_shader_payload &payload)
     auto ambient = ka.cwiseProduct(amb_light_intensity);
     auto diffuse = kd.cwiseProduct(light.intensity / (r * r)) *
                    std::max(0.0, (double)n.dot(l));
-    auto h = (v + l).normalized();
+    auto h = (v + l).normalized(); // 半程向量
     auto specular = ks.cwiseProduct(light.intensity / (r * r)) *
                     pow(std::max(0.0, (double)h.dot(n)), p);
-
+    /*
+      L = L_a + L_d + L_s
+        = k_a * L_a + k_d (I / r^2)max(0, n dot l) + k_s(I / r^2)max(0, n dot h)
+    */
     result_color += ambient + diffuse + specular;
   }
 
@@ -107,14 +115,11 @@ auto phong_fragment_shader(const fragment_shader_payload &payload)
 
   Eigen::Vector3f result_color = {0, 0, 0};
   for (auto &light : lights) {
-    // TODO: For each light source in the code, calculate what the *ambient*,
-    // *diffuse*, and *specular* components are. Then, accumulate that result on
-    // the *result_color* object.
     float r = (light.position - point).norm();
     auto l = (light.position - point).normalized();
     auto n = normal.normalized();
     auto v = (eye_pos - point).normalized();
-
+    // L_d = k_d (I / r^2 )max(0, n \cdot l)
     auto ambient = ka.cwiseProduct(amb_light_intensity);
     auto diffuse = kd.cwiseProduct(light.intensity / (r * r)) *
                    std::max(0.0, (double)n.dot(l));
@@ -168,7 +173,11 @@ auto displacement_fragment_shader(const fragment_shader_payload &payload)
                     z * y / sqrt(x * x + z * z));
   auto b = n.cross(t);
   Eigen::Matrix3f TBN;
-  TBN << t.x(), b.x(), n.x(), t.y(), b.y(), n.y(), t.z(), b.z(), n.z();
+  // clang-format off
+  TBN << t.x(), b.x(), n.x(),
+         t.y(), b.y(), n.y(),
+         t.z(), b.z(), n.z();
+  // clang-format on
   auto dU = kh * kn *
             (payload.texture->getColor(std::min(u + 1.0 / w, 1.0), v).norm() -
              payload.texture->getColor(u, v).norm());
@@ -181,9 +190,6 @@ auto displacement_fragment_shader(const fragment_shader_payload &payload)
   Eigen::Vector3f result_color = {0, 0, 0};
 
   for (auto &light : lights) {
-    // TODO: For each light source in the code, calculate what the *ambient*,
-    // *diffuse*, and *specular* components are. Then, accumulate that result on
-    // the *result_color* object.
     float r = (light.position - point).norm();
     auto l = (light.position - point).normalized();
     auto n = normal.normalized();
@@ -244,7 +250,11 @@ auto bump_fragment_shader(const fragment_shader_payload &payload)
                     z * y / sqrt(x * x + z * z));
   auto b = n.cross(t);
   Eigen::Matrix3f TBN;
-  TBN << t.x(), b.x(), n.x(), t.y(), b.y(), n.y(), t.z(), b.z(), n.z();
+  // clang-format off
+  TBN << t.x(), b.x(), n.x(), 
+         t.y(), b.y(), n.y(), 
+         t.z(), b.z(), n.z();
+  // clang-format on
   auto dU = kh * kn *
             (payload.texture->getColor(std::min(u + 1.0 / w, 1.0), v).norm() -
              payload.texture->getColor(u, v).norm());
@@ -268,6 +278,10 @@ auto main(int argc, const char **argv) -> int {
 
   // Load .obj File
   bool loadout = Loader.LoadFile("../models/spot/spot_triangulated_good.obj");
+  if(loadout == false) {
+    std::cerr << "Load Error" << std::endl;
+  }
+  // 从 OBJ 文件中读取三角形，并且创建对应的对象
   for (auto mesh : Loader.LoadedMeshes) {
     for (int i = 0; i < (int)mesh.Vertices.size(); i += 3) {
       auto *t = new Triangle();
@@ -289,7 +303,7 @@ auto main(int argc, const char **argv) -> int {
 
   auto texture_path = "hmap.jpg";
   r.set_texture(Texture(obj_path + texture_path));
-
+  // phong 模型
   std::function<Eigen::Vector3f(fragment_shader_payload)> active_shader =
       phong_fragment_shader;
 
@@ -363,6 +377,7 @@ auto main(int argc, const char **argv) -> int {
     } else if (key == 'd') {
       angle += 0.1;
     }
+    std::cout << "frame count: " << frame_count++ << std::endl;
   }
   return 0;
 }
