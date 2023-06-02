@@ -4,7 +4,6 @@
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "Triangle.hpp"
-#include "draw.hpp"
 #include "matrix.hpp"
 #include "rasterizer.hpp"
 
@@ -129,7 +128,8 @@ auto phong_fragment_shader(const fragment_shader_payload &payload)
   return result_color * 255.f;
 }
 
-auto displacement_fragment_shader(const fragment_shader_payload &payload) -> Eigen::Vector3f {
+auto displacement_fragment_shader(const fragment_shader_payload &payload)
+    -> Eigen::Vector3f {
 
   Eigen::Vector3f ka = Eigen::Vector3f(0.005, 0.005, 0.005);
   Eigen::Vector3f kd = payload.color;
@@ -160,17 +160,22 @@ auto displacement_fragment_shader(const fragment_shader_payload &payload) -> Eig
   // Vector ln = (-dU, -dV, 1)
   // Position p = p + kn * n * h(u,v)
   // Normal n = normalize(TBN * ln)
-  auto w = payload.texture -> width, h = payload.texture -> height;
+  auto w = payload.texture->width, h = payload.texture->height;
   auto u = payload.tex_coords.x(), v = payload.tex_coords.y();
   auto n = normal.normalized();
   double x = n.x(), y = n.y(), z = n.z();
-  auto t = Vector3f(x*y/sqrt(x*x+z*z),sqrt(x*x+z*z),z*y/sqrt(x*x+z*z));
+  auto t = Vector3f(x * y / sqrt(x * x + z * z), sqrt(x * x + z * z),
+                    z * y / sqrt(x * x + z * z));
   auto b = n.cross(t);
   Eigen::Matrix3f TBN;
   TBN << t.x(), b.x(), n.x(), t.y(), b.y(), n.y(), t.z(), b.z(), n.z();
-  auto dU = kh * kn * (payload.texture -> getColor(std::min(u+1.0/w,1.0), v).norm() - payload.texture -> getColor(u, v).norm());
-  auto dV = kh * kn * (payload.texture -> getColor(u, std::min(v+1.0/h,1.0)).norm() - payload.texture -> getColor(u, v).norm());
-  point = point + kn * normal * payload.texture -> getColor(u, v).norm();
+  auto dU = kh * kn *
+            (payload.texture->getColor(std::min(u + 1.0 / w, 1.0), v).norm() -
+             payload.texture->getColor(u, v).norm());
+  auto dV = kh * kn *
+            (payload.texture->getColor(u, std::min(v + 1.0 / h, 1.0)).norm() -
+             payload.texture->getColor(u, v).norm());
+  point = point + kn * normal * payload.texture->getColor(u, v).norm();
   normal = (TBN * Vector3f(-dU, -dV, 1.0)).normalized();
 
   Eigen::Vector3f result_color = {0, 0, 0};
@@ -183,19 +188,22 @@ auto displacement_fragment_shader(const fragment_shader_payload &payload) -> Eig
     auto l = (light.position - point).normalized();
     auto n = normal.normalized();
     auto v = (eye_pos - point).normalized();
-    
+
     auto ambient = ka.cwiseProduct(amb_light_intensity);
-    auto diffuse = kd.cwiseProduct(light.intensity / (r*r)) * std::max(0.0, (double)n.dot(l));
-    auto h = (v+l).normalized();
-    auto specular = ks.cwiseProduct(light.intensity / (r*r)) * pow(std::max(0.0, (double)h.dot(n)), p);
-    
+    auto diffuse = kd.cwiseProduct(light.intensity / (r * r)) *
+                   std::max(0.0, (double)n.dot(l));
+    auto h = (v + l).normalized();
+    auto specular = ks.cwiseProduct(light.intensity / (r * r)) *
+                    pow(std::max(0.0, (double)h.dot(n)), p);
+
     result_color += ambient + diffuse + specular;
   }
 
   return result_color * 255.f;
 }
 
-auto bump_fragment_shader(const fragment_shader_payload &payload) -> Eigen::Vector3f {
+auto bump_fragment_shader(const fragment_shader_payload &payload)
+    -> Eigen::Vector3f {
 
   Eigen::Vector3f ka = Eigen::Vector3f(0.005, 0.005, 0.005);
   Eigen::Vector3f kd = payload.color;
@@ -228,16 +236,21 @@ auto bump_fragment_shader(const fragment_shader_payload &payload) -> Eigen::Vect
 
   Eigen::Vector3f result_color = {0, 0, 0};
   result_color = normal;
-  auto w = payload.texture -> width, h = payload.texture -> height;
+  auto w = payload.texture->width, h = payload.texture->height;
   auto u = payload.tex_coords.x(), v = payload.tex_coords.y();
   auto n = normal.normalized();
   double x = n.x(), y = n.y(), z = n.z();
-  auto t = Vector3f(x*y/sqrt(x*x+z*z),sqrt(x*x+z*z),z*y/sqrt(x*x+z*z));
+  auto t = Vector3f(x * y / sqrt(x * x + z * z), sqrt(x * x + z * z),
+                    z * y / sqrt(x * x + z * z));
   auto b = n.cross(t);
   Eigen::Matrix3f TBN;
   TBN << t.x(), b.x(), n.x(), t.y(), b.y(), n.y(), t.z(), b.z(), n.z();
-  auto dU = kh * kn * (payload.texture -> getColor(std::min(u+1.0/w,1.0), v).norm() - payload.texture -> getColor(u, v).norm());
-  auto dV = kh * kn * (payload.texture -> getColor(u, std::min(v+1.0/h,1.0)).norm() - payload.texture -> getColor(u, v).norm());
+  auto dU = kh * kn *
+            (payload.texture->getColor(std::min(u + 1.0 / w, 1.0), v).norm() -
+             payload.texture->getColor(u, v).norm());
+  auto dV = kh * kn *
+            (payload.texture->getColor(u, std::min(v + 1.0 / h, 1.0)).norm() -
+             payload.texture->getColor(u, v).norm());
   result_color = (TBN * Vector3f(-dU, -dV, 1.0)).normalized();
 
   return result_color * 255.f;

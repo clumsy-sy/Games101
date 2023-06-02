@@ -365,7 +365,8 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t) {
     }
   }
 }
-void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eigen::Vector3f, 3> &world_pos) {
+void rst::rasterizer::rasterize_triangle(
+    const Triangle &t, const std::array<Eigen::Vector3f, 3> &world_pos) {
   auto v = t.toVector4();
   // AABB
   double minX, minY, maxX, maxY;
@@ -390,10 +391,15 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eig
         continue;
       // If so, use the following code to get the interpolated z value.
       auto [alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
-      auto interpolated_color = alpha * t.color[0] + beta * t.color[1] + gamma * t.color[2];
-      auto interpolated_normal = alpha * t.normal[0] + beta * t.normal[1] + gamma * t.normal[2];
-      auto interpolated_texcoords = alpha * t.tex_coords[0] + beta * t.tex_coords[1] + gamma * t.tex_coords[2];
-      auto interpolated_shadingcoords = alpha * world_pos[0] + beta * world_pos[1] + gamma * world_pos[2];
+      auto interpolated_color =
+          alpha * t.color[0] + beta * t.color[1] + gamma * t.color[2];
+      auto interpolated_normal =
+          alpha * t.normal[0] + beta * t.normal[1] + gamma * t.normal[2];
+      auto interpolated_texcoords = alpha * t.tex_coords[0] +
+                                    beta * t.tex_coords[1] +
+                                    gamma * t.tex_coords[2];
+      auto interpolated_shadingcoords =
+          alpha * world_pos[0] + beta * world_pos[1] + gamma * world_pos[2];
       float w_reciprocal =
           1.0 / (alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
       float z_interpolated = alpha * v[0].z() / v[0].w() +
@@ -407,8 +413,9 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eig
         continue;
       depth_buf[buf_index] = z_interpolated;
 
-      fragment_shader_payload payload( interpolated_color, interpolated_normal.normalized(), interpolated_texcoords, texture ?
-      &*texture : nullptr);
+      fragment_shader_payload payload(
+          interpolated_color, interpolated_normal.normalized(),
+          interpolated_texcoords, texture ? &*texture : nullptr);
       payload.view_pos = interpolated_shadingcoords;
       auto pixel_color = fragment_shader(payload);
 

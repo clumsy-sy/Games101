@@ -1,9 +1,9 @@
 /*
   Created by sy 2023/5/31
 */
-#include "rasterizer.hpp"
 #include "draw.hpp"
 #include "matrix.hpp"
+#include "rasterizer.hpp"
 #include <opencv2/opencv.hpp>
 
 auto draw::graphics::draw_two_triangle(int argc, const char **argv) -> int {

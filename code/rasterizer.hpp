@@ -5,9 +5,9 @@
 #ifndef RASTERUZAER_HPP
 #define RASTERUZAER_HPP
 
+#include "Shader.hpp"
 #include "Texture.hpp"
 #include "Triangle.hpp"
-#include "Shader.hpp"
 #include <eigen3/Eigen/Eigen>
 #include <vector>
 using namespace Eigen;
@@ -88,8 +88,10 @@ public:
   // set texture
   inline void set_texture(Texture tex) { texture = tex; }
   // set shader
-  void set_vertex_shader(std::function<Eigen::Vector3f(vertex_shader_payload)> vert_shader);
-  void set_fragment_shader(std::function<Eigen::Vector3f(fragment_shader_payload)> frag_shader);
+  void set_vertex_shader(
+      std::function<Eigen::Vector3f(vertex_shader_payload)> vert_shader);
+  void set_fragment_shader(
+      std::function<Eigen::Vector3f(fragment_shader_payload)> frag_shader);
   // set a pixel
   void set_pixel(const Eigen::Vector3f &point, const Eigen::Vector3f &color);
   // clear buffer
@@ -105,7 +107,8 @@ private:
   void draw_line(Eigen::Vector3f begin, Eigen::Vector3f end);
   // use class triangle
   void rasterize_triangle(const Triangle &t);
-  void rasterize_triangle(const Triangle &t, const std::array<Eigen::Vector3f, 3> &world_pos);
+  void rasterize_triangle(const Triangle &t,
+                          const std::array<Eigen::Vector3f, 3> &world_pos);
   void rasterize_triangle_SSAA(const Triangle &t, const int N);
   auto get_index(int x, int y) -> int;
   auto get_next_id() -> int;

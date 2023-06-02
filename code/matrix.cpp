@@ -31,7 +31,9 @@ auto matrix::mat::get_model_matrix(float rotation_angle) -> Eigen::Matrix4f {
   return model;
 }
 // notice the eye_fov need divide 2.
-auto matrix::mat::get_projection_matrix(float eye_fov, float aspect_ratio, float zNear, float zFar) -> Eigen::Matrix4f {
+auto matrix::mat::get_projection_matrix(float eye_fov, float aspect_ratio,
+                                        float zNear, float zFar)
+    -> Eigen::Matrix4f {
   Eigen::Matrix4f projection;
   float top = -std::tan(aTOr(eye_fov / 2.0f) * abs(zNear));
   float right = top * aspect_ratio;
@@ -44,16 +46,16 @@ auto matrix::mat::get_projection_matrix(float eye_fov, float aspect_ratio, float
   return projection;
 }
 // this is the origin function of get_projection_matrix
-auto matrix::mat::get_projection_matrix_origin(float eye_fov, float aspect_ratio,
-                                      float zNear, float zFar) -> Eigen::Matrix4f
-{
-    Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
-    float n = -zNear, f = -zFar;
-    float t = std::abs(n) * std::tan(aTOr(eye_fov) / 2), r = t * aspect_ratio;
-    float b = -t, l = -r;
+auto matrix::mat::get_projection_matrix_origin(float eye_fov,
+                                               float aspect_ratio, float zNear,
+                                               float zFar) -> Eigen::Matrix4f {
+  Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
+  float n = -zNear, f = -zFar;
+  float t = std::abs(n) * std::tan(aTOr(eye_fov) / 2), r = t * aspect_ratio;
+  float b = -t, l = -r;
 
-    Eigen::Matrix4f PerspToOrtho, translate, scale;
-    // clang-format off
+  Eigen::Matrix4f PerspToOrtho, translate, scale;
+  // clang-format off
     PerspToOrtho << n, 0, 0, 0,
                     0, n, 0, 0,
                     0, 0, n + f, -n * f,
@@ -66,7 +68,7 @@ auto matrix::mat::get_projection_matrix_origin(float eye_fov, float aspect_ratio
              0, 2 / (t - b), 0, 0,
              0, 0, 2 / (n - f), 0,
              0, 0, 0, 1;
-    // clang-format on
-    projection = scale * translate * PerspToOrtho;
-    return projection;
+  // clang-format on
+  projection = scale * translate * PerspToOrtho;
+  return projection;
 }

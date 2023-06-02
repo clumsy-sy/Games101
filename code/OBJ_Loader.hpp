@@ -196,8 +196,7 @@ struct Mesh {
 namespace math {
 // Vector3 Cross Product
 auto CrossV3(const Vector3 a, const Vector3 b) -> Vector3 {
-  return {a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z,
-                 a.X * b.Y - a.Y * b.X};
+  return {a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z, a.X * b.Y - a.Y * b.X};
 }
 
 // Vector3 Magnitude Calculation
@@ -256,7 +255,8 @@ auto GenTriNormal(Vector3 t1, Vector3 t2, Vector3 t3) -> Vector3 {
 }
 
 // Check to see if a Vector3 Point is within a 3 Vector3 Triangle
-auto inTriangle(Vector3 point, Vector3 tri1, Vector3 tri2, Vector3 tri3) -> bool {
+auto inTriangle(Vector3 point, Vector3 tri1, Vector3 tri2, Vector3 tri3)
+    -> bool {
   // Test to see if it is within an infinite prism that the triangle outlines.
   bool within_tri_prisim = SameSide(point, tri1, tri2, tri3) &&
                            SameSide(point, tri2, tri1, tri3) &&
@@ -282,7 +282,7 @@ auto inTriangle(Vector3 point, Vector3 tri1, Vector3 tri2, Vector3 tri3) -> bool
 
 // Split a String into a string array at a given token
 inline void split(const std::string &in, std::vector<std::string> &out,
-                  const std::string& token) {
+                  const std::string &token) {
   out.clear();
 
   std::string temp;
@@ -338,7 +338,8 @@ inline auto firstToken(const std::string &in) -> std::string {
 
 // Get element at given index position
 template <class T>
-inline auto getElement(const std::vector<T> &elements, std::string &index) -> const T & {
+inline auto getElement(const std::vector<T> &elements, std::string &index)
+    -> const T & {
   int idx = std::stoi(index);
   if (idx < 0)
     idx = int(elements.size()) + idx;
@@ -363,7 +364,7 @@ public:
   //
   // If the file is unable to be found
   // or unable to be loaded return false
-  auto LoadFile(const std::string& Path) -> bool {
+  auto LoadFile(const std::string &Path) -> bool {
     // If the file is not an .obj file return false
     if (Path.substr(Path.size() - 4, 4) != ".obj")
       return false;
@@ -497,7 +498,7 @@ public:
         GenVerticesFromRawOBJ(vVerts, Positions, TCoords, Normals, curline);
 
         // Add Vertices
-        for (auto & vVert : vVerts) {
+        for (auto &vVert : vVerts) {
           Vertices.push_back(vVert);
 
           LoadedVertices.push_back(vVert);
@@ -513,8 +514,8 @@ public:
               (unsigned int)((Vertices.size()) - vVerts.size()) + iIndice;
           Indices.push_back(indnum);
 
-          indnum = (unsigned int)((LoadedVertices.size()) - vVerts.size()) +
-                   iIndice;
+          indnum =
+              (unsigned int)((LoadedVertices.size()) - vVerts.size()) + iIndice;
           LoadedIndices.push_back(indnum);
         }
       }
@@ -600,7 +601,7 @@ public:
 
       // Find corresponding material name in loaded materials
       // when found copy material variables into mesh material
-      for (auto & LoadedMaterial : LoadedMaterials) {
+      for (auto &LoadedMaterial : LoadedMaterials) {
         if (LoadedMaterial.name == matname) {
           LoadedMeshes[i].MeshMaterial = LoadedMaterial;
           break;
@@ -632,7 +633,7 @@ private:
                              const std::vector<Vector3> &iPositions,
                              const std::vector<Vector2> &iTCoords,
                              const std::vector<Vector3> &iNormals,
-                             const std::string& icurline) {
+                             const std::string &icurline) {
     std::vector<std::string> sface, svert;
     Vertex vVert;
     algorithm::split(algorithm::tail(icurline), sface, " ");
@@ -640,7 +641,7 @@ private:
     bool noNormal = false;
 
     // For every given vertex do this
-    for (auto & i : sface) {
+    for (auto &i : sface) {
       // See What type the vertex is.
       int vtype;
 
@@ -719,7 +720,7 @@ private:
 
       Vector3 normal = math::CrossV3(A, B);
 
-      for (auto & oVert : oVerts) {
+      for (auto &oVert : oVerts) {
         oVert.Normal = normal;
       }
     }
@@ -796,7 +797,7 @@ private:
           }
 
           Vector3 tempVec;
-          for (auto & tVert : tVerts) {
+          for (auto &tVert : tVerts) {
             if (tVert.Position != pCur.Position &&
                 tVert.Position != pPrev.Position &&
                 tVert.Position != pNext.Position) {
@@ -828,7 +829,7 @@ private:
 
         // If any vertices are within this triangle
         bool inTri = false;
-        for (const auto & iVert : iVerts) {
+        for (const auto &iVert : iVerts) {
           if (algorithm::inTriangle(iVert.Position, pPrev.Position,
                                     pCur.Position, pNext.Position) &&
               iVert.Position != pPrev.Position &&
@@ -875,7 +876,7 @@ private:
   }
 
   // Load Materials from .mtl file
-  auto LoadMaterials(const std::string& path) -> bool {
+  auto LoadMaterials(const std::string &path) -> bool {
     // If the file is not a material file return false
     if (path.substr(path.size() - 4, path.size()) != ".mtl")
       return false;

@@ -17,7 +17,8 @@ struct fragment_shader_payload {
 
   fragment_shader_payload(Eigen::Vector3f col, Eigen::Vector3f nor,
                           Eigen::Vector2f tc, Texture *tex)
-      : color(std::move(col)), normal(std::move(nor)), tex_coords(std::move(tc)), texture(tex) {}
+      : color(std::move(col)), normal(std::move(nor)),
+        tex_coords(std::move(tc)), texture(tex) {}
 };
 
 struct vertex_shader_payload {
