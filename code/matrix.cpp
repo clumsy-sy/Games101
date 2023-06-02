@@ -31,9 +31,14 @@ auto matrix::mat::get_model_matrix(float rotation_angle) -> Eigen::Matrix4f {
            0, 1, 0, 0,
            -sin(rad), 0, cos(rad), 0,
            0, 0, 0, 1;
+  Eigen::Matrix4f scale = Eigen::Matrix4f::Identity();
+  scale << 2, 0, 0, 0,
+           0, 2, 0, 0,
+           0, 0, 2, 0,
+           0, 0, 0, 1;
   // clang-format on
   
-  return model;
+  return model * scale;
 }
 // notice the eye_fov need divide 2.
 auto matrix::mat::get_projection_matrix(float eye_fov, float aspect_ratio,

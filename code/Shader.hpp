@@ -8,7 +8,8 @@
 #include <eigen3/Eigen/Eigen>
 #include <utility>
 
-struct fragment_shader_payload {
+class fragment_shader_payload {
+public:
   Eigen::Vector3f view_pos, color, normal;
   Eigen::Vector2f tex_coords;
   Texture *texture;
@@ -21,7 +22,8 @@ struct fragment_shader_payload {
         tex_coords(std::move(tc)), texture(tex) {}
 };
 
-struct vertex_shader_payload {
+class vertex_shader_payload {
+public:
   Eigen::Vector3f position;
 };
 

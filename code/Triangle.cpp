@@ -20,10 +20,6 @@ Triangle::Triangle() {
   tex_coords[2] << 0.0, 0.0;
 }
 
-inline auto Triangle::a() const -> Eigen::Vector4f { return v[0]; }
-inline auto Triangle::b() const -> Eigen::Vector4f { return v[1]; }
-inline auto Triangle::c() const -> Eigen::Vector4f { return v[2]; }
-
 void Triangle::setVertex(int ind, Vector4f ver) { v[ind] = std::move(ver); }
 
 void Triangle::setNormal(int ind, Vector3f n) { normal[ind] = std::move(n); }
@@ -38,14 +34,23 @@ void Triangle::setColor(int ind, float r, float g, float b) {
   color[ind] = Vector3f((float)r / 255., (float)g / 255., (float)b / 255.);
   return;
 }
+void Triangle::setNormals(const std::array<Vector3f, 3> &normals) {
+  normal[0] = normals[0];
+  normal[1] = normals[1];
+  normal[2] = normals[2];
+}
+void Triangle::setColors(const std::array<Vector3f, 3> &colors) {
+  setColor(0, colors[0][0], colors[0][1], colors[0][2]);
+  setColor(1, colors[1][0], colors[1][1], colors[1][2]);
+  setColor(2, colors[2][0], colors[2][1], colors[2][2]);
+}
 
-auto Triangle::getColor() const -> Vector3f { return color[0] * 255; }
 
 void Triangle::setTexCoord(int ind, float s, float t) {
   tex_coords[ind] = Vector2f(s, t);
 }
-void Triangle::setTexCoord(int ind, Eigen::Vector2f tex) {
-  tex_coords[ind] = std::move(tex);
+void Triangle::setTexCoord(int ind, Eigen::Vector2f uv) {
+  tex_coords[ind] = std::move(uv);
 }
 
 auto Triangle::toVector4() const -> std::array<Vector4f, 3> {

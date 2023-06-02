@@ -225,8 +225,7 @@ void rst::rasterizer::draw(std::vector<Triangle *> &TriangleList) {
     Eigen::Matrix4f inv_trans = (view * model).inverse().transpose();
     std::array<Eigen::Vector4f, 3> n = {inv_trans * to_vec4(t->normal[0], 0.0f),
                                         inv_trans * to_vec4(t->normal[1], 0.0f),
-                                        inv_trans *
-                                            to_vec4(t->normal[2], 0.0f)};
+                                        inv_trans * to_vec4(t->normal[2], 0.0f)};
 
     // Viewport transformation
     for (auto &vert : v) {
@@ -391,13 +390,13 @@ void rst::rasterizer::rasterize_triangle(
 
   // iterate through the pixel and find if the current pixel is inside the
 
-  for (int x = (int)minX; x <= (int)maxX; x++) {
-    for (int y = (int)minY; y <= (int)maxY; y++) {
-
-      if (!insideTriangle(x, y, t.v))
+  for (int x = std::floor(minX); x <= std::ceil(maxX); x++) {
+    for (int y = std::floor(minY); y <= std::ceil(maxY); y++) {
+      float x_pos = (float)x + 0.5, y_pos = (float)y + 0.5;
+      if (!insideTriangle(x_pos, y_pos, t.v))
         continue;
       // If so, use the following code to get the interpolated z value.
-      auto [alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
+      auto [alpha, beta, gamma] = computeBarycentric2D(x_pos, y_pos, t.v);
       float w_reciprocal =
           1.0 / (alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
       float z_interpolated = alpha * v[0].z() / v[0].w() +
@@ -405,11 +404,11 @@ void rst::rasterizer::rasterize_triangle(
                              gamma * v[2].z() / v[2].w();
       z_interpolated *= w_reciprocal;
 
-      int buf_index = get_index(x, y);
+      int buf_index = get_index(x_pos, y_pos);
       if (z_interpolated >= depth_buf[buf_index])
         continue;
       depth_buf[buf_index] = z_interpolated;
-      //
+      // 插值计算
       auto interpolated_color = interpolate(alpha, beta, gamma, t.color[0],
                                             t.color[1], t.color[2], 1);
       auto interpolated_normal = interpolate(alpha, beta, gamma, t.normal[0],
