@@ -3,6 +3,7 @@ import sys
 import os
 
 def main():
+    # os.system('cd code && mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release')
     os.system('cd code && mkdir -p build && cd build && cmake ..')
     os.system('cd code/build && make -j4')
     command='cd code/build && ./Rasterizer'

@@ -235,8 +235,6 @@ auto bump_fragment_shader(const fragment_shader_payload &payload)
   Eigen::Vector3f amb_light_intensity{10, 10, 10};
   Eigen::Vector3f eye_pos{0, 0, 10};
 
-  float p = 150;
-
   Eigen::Vector3f color = payload.color;
   Eigen::Vector3f point = payload.view_pos;
   Eigen::Vector3f normal = payload.normal;
@@ -388,11 +386,11 @@ auto main(int argc, const char **argv) -> int {
     key = cv::waitKey(10);
 
     if (key == 'a') {
-      angle -= 0.1;
+      angle -= 1;
     } else if (key == 'd') {
-      angle += 0.1;
+      angle += 1;
     }
-    std::cout << "frame count: " << frame_count++ << std::endl;
+    std::cout << "frame count: " << frame_count++ << " angle: " << angle << std::endl;
   }
   return 0;
 }
