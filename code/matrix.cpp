@@ -37,7 +37,7 @@ auto matrix::mat::get_model_matrix(float rotation_angle) -> Eigen::Matrix4f {
            0, 0, 2, 0,
            0, 0, 0, 1;
   // clang-format on
-  
+
   return model * scale;
 }
 // notice the eye_fov need divide 2.

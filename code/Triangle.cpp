@@ -45,7 +45,6 @@ void Triangle::setColors(const std::array<Vector3f, 3> &colors) {
   setColor(2, colors[2][0], colors[2][1], colors[2][2]);
 }
 
-
 void Triangle::setTexCoord(int ind, float s, float t) {
   tex_coords[ind] = Vector2f(s, t);
 }

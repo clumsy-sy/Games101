@@ -21,16 +21,16 @@ public:
     3. 三个点的材质信息 （U，V）
     4. 三个点的法向量信息（Vector3f）
   */
-  std::array<Vector4f, 3> v; /*the coordinates of the triangle, v0, v1, v2, 1.0 in
-                                counter clockwise order*/
+  std::array<Vector4f, 3> v; /*the coordinates of the triangle, v0, v1, v2, 1.0
+                                in counter clockwise order*/
   std::array<Vector3f, 3> color;      // color at each vertex;
   std::array<Vector2f, 3> tex_coords; // texture u,v
   std::array<Vector3f, 3> normal;     // normal vector for each vertex
   // 构造函数和每个点的 get 函数
   Triangle();
-  [[nodiscard]] auto a() const -> Eigen::Vector4f{ return v[0]; };
-  [[nodiscard]] auto b() const -> Eigen::Vector4f{ return v[1]; };
-  [[nodiscard]] auto c() const -> Eigen::Vector4f{ return v[2]; };
+  [[nodiscard]] auto a() const -> Eigen::Vector4f { return v[0]; };
+  [[nodiscard]] auto b() const -> Eigen::Vector4f { return v[1]; };
+  [[nodiscard]] auto c() const -> Eigen::Vector4f { return v[2]; };
   [[nodiscard]] auto getColor() const -> Vector3f { return color[0] * 255; };
   // set 函数，设置某个点的信息
   void setVertex(int ind, Vector4f ver); /*set i-th vertex coordinates */

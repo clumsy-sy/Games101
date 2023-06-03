@@ -225,7 +225,8 @@ void rst::rasterizer::draw(std::vector<Triangle *> &TriangleList) {
     Eigen::Matrix4f inv_trans = (view * model).inverse().transpose();
     std::array<Eigen::Vector4f, 3> n = {inv_trans * to_vec4(t->normal[0], 0.0f),
                                         inv_trans * to_vec4(t->normal[1], 0.0f),
-                                        inv_trans * to_vec4(t->normal[2], 0.0f)};
+                                        inv_trans *
+                                            to_vec4(t->normal[2], 0.0f)};
 
     // Viewport transformation
     for (auto &vert : v) {
@@ -377,7 +378,7 @@ void rst::rasterizer::rasterize_triangle(
   // AABB
   double minX, minY, maxX, maxY;
   minX = maxX = v[0][0];
-  minX = maxX = v[0][1];
+  minY = maxY = v[0][1];
   for (int i = 1; i < 3; i++) { // 从第二个点个开始
     const Vector4f &point = t.v[i];
 

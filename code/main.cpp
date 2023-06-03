@@ -6,6 +6,7 @@
 #include "Triangle.hpp"
 #include "matrix.hpp"
 #include "rasterizer.hpp"
+#include <eigen3/Eigen/src/Core/Matrix.h>
 #include <system_error>
 
 auto vertex_shader(const vertex_shader_payload &payload) -> Eigen::Vector3f {
@@ -17,7 +18,7 @@ auto normal_fragment_shader(const fragment_shader_payload &payload)
   Eigen::Vector3f return_color = (payload.normal.head<3>().normalized() +
                                   Eigen::Vector3f(1.0f, 1.0f, 1.0f)) /
                                  2.f;
-  Eigen::Vector3f result;
+  auto result = Vector3f(return_color);
   result << return_color.x() * 255, return_color.y() * 255,
       return_color.z() * 255;
   return result;
@@ -73,20 +74,22 @@ auto phong_fragment_shader(const fragment_shader_payload &payload)
       n：照射点的法向量
       v：点到观测点的法向量
     */
-    float r = (light.position - point).norm();
-    auto l = (light.position - point).normalized();
+    auto l2p = light.position - point;
+    float r_square = l2p.dot(l2p); // r^2
+    auto l = l2p.normalized();
     auto n = normal.normalized();
     auto v = (eye_pos - point).normalized();
     // L_d = k_d (I / r^2 )max(0, n \cdot l)
     auto ambient = ka.cwiseProduct(amb_light_intensity);
-    auto diffuse = kd.cwiseProduct(light.intensity / (r * r)) *
+    auto diffuse = kd.cwiseProduct(light.intensity / r_square) *
                    std::max(0.0, (double)n.dot(l));
     auto h = (v + l).normalized(); // 半程向量
-    auto specular = ks.cwiseProduct(light.intensity / (r * r)) *
-                    pow(std::max(0.0, (double)h.dot(n)), p);
+    auto specular = ks.cwiseProduct(light.intensity / r_square) *
+                    pow(std::max(0.0, (double)n.dot(h)), p);
     /*
       L = L_a + L_d + L_s
-        = k_a * L_a + k_d (I / r^2)max(0, n dot l) + k_s(I / r^2)max(0, n dot h)
+        = k_a * L_a + k_d (I / r^2)max(0, n dot l) + k_s(I / r^2)max(0, n dot
+      h)^p
     */
     result_color += ambient + diffuse + specular;
   }
@@ -134,7 +137,7 @@ auto texture_fragment_shader(const fragment_shader_payload &payload)
                    std::max(0.0, (double)n.dot(l));
     auto h = (v + l).normalized(); // 半程向量
     auto specular = ks.cwiseProduct(light.intensity / (r * r)) *
-                    pow(std::max(0.0, (double)h.dot(n)), p);
+                    pow(std::max(0.0, (double)n.dot(h)), p);
 
     result_color += ambient + diffuse + specular;
   }
@@ -338,7 +341,7 @@ auto main(int argc, const char **argv) -> int {
       std::cout << "Rasterizing using the bump shader\n";
       active_shader = bump_fragment_shader;
     } else if (argc == 3 && std::string(argv[2]) == "displacement") {
-      std::cout << "Rasterizing using the bump shader\n";
+      std::cout << "Rasterizing using the displacement shader\n";
       active_shader = displacement_fragment_shader;
     }
   }
