@@ -2,3 +2,5 @@
 **/build/
 *.pdf
 *.epub
+**/cmake-build*/
+*.idea/
