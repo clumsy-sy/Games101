@@ -25,7 +25,6 @@ auto rayTriangleIntersect(const Vector3f &v0, const Vector3f &v1,
   if (tnear > eps && u > eps && v > eps && 1 - u - v > eps)
     return true;
   return false;
-  return false;
 }
 
 MeshTriangle::MeshTriangle(std::vector<Vector3f> &verts,

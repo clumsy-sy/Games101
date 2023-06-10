@@ -1,9 +1,9 @@
 #include "Renderer.hpp"
 #include "Scene.hpp"
 #include "Vector.hpp"
+#include <array>
 #include <fstream>
 #include <optional>
-#include <array>
 
 inline auto deg2rad(const float &deg) -> float { return deg * M_PI / 180.0; }
 
@@ -241,10 +241,10 @@ void Renderer::Render(const Scene &scene) {
       // direction vector that passes through it. Also, don't forget to multiply
       // both of them with the variable *scale*, and x (horizontal) variable
       // with the *imageAspectRatio*
-      x = 1.0 * i / scene.width - 0.5; 
-            y = -1.0 * j / scene.height + 0.5; 
-            x *= 2 * imageAspectRatio * scale;
-            y *= 2 * scale;
+      x = 1.0 * i / scene.width - 0.5;
+      y = -1.0 * j / scene.height + 0.5;
+      x *= 2 * imageAspectRatio * scale;
+      y *= 2 * scale;
 
       Vector3f dir =
           Vector3f(x, y, -1); // Don't forget to normalize this direction!

@@ -9,7 +9,9 @@
 
 #include <cstring>
 #include <memory>
+/*
 
+*/
 class MeshTriangle : public Object {
 public:
   uint32_t numTriangles;

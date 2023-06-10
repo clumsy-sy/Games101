@@ -14,7 +14,7 @@
 // function().
 auto main() -> int {
   Scene scene(1280, 960);
-
+  // 在场景中添加两个球体
   auto sph1 = std::make_unique<Sphere>(Vector3f(-1, 0, -12), 2);
   sph1->materialType = DIFFUSE_AND_GLOSSY;
   sph1->diffuseColor = Vector3f(0.6, 0.7, 0.8);
@@ -26,7 +26,8 @@ auto main() -> int {
   scene.Add(std::move(sph1));
   scene.Add(std::move(sph2));
 
-  std::vector<Vector3f> verts = {{-5, -3, -6}, {5, -3, -6}, {5, -3, -16}, {-5, -3, -16}};
+  std::vector<Vector3f> verts = {
+      {-5, -3, -6}, {5, -3, -6}, {5, -3, -16}, {-5, -3, -16}};
   std::vector<uint32_t> vertIndex = {0, 1, 3, 1, 2, 3};
   std::vector<Vector2f> st = {{0, 0}, {1, 0}, {1, 1}, {0, 1}};
   auto mesh = std::make_unique<MeshTriangle>(verts, vertIndex, 2, st);

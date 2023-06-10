@@ -18,8 +18,7 @@ public:
   float specularExponent = 25; // 镜面反射系数
 
 public:
-  Object()
-      : diffuseColor(0.2) {}
+  Object() : diffuseColor(0.2) {}
 
   virtual ~Object() = default;
 
@@ -30,7 +29,8 @@ public:
                                     const uint32_t &, const Vector2f &,
                                     Vector3f &, Vector2f &) const = 0;
 
-  [[nodiscard]] virtual auto evalDiffuseColor(const Vector2f &) const -> Vector3f {
+  [[nodiscard]] virtual auto evalDiffuseColor(const Vector2f &) const
+      -> Vector3f {
     return diffuseColor;
   }
 };
