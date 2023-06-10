@@ -86,7 +86,7 @@ public:
   void set_view(const Eigen::Matrix4f &v);
   void set_projection(const Eigen::Matrix4f &p);
   // set texture
-  inline void set_texture(Texture tex) { texture = tex; }
+  inline void set_texture(const Texture& tex) { texture = tex; }
   // set shader
   void set_vertex_shader(
       std::function<Eigen::Vector3f(vertex_shader_payload)> vert_shader);

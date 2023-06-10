@@ -27,4 +27,22 @@ public:
   Eigen::Vector3f position;
 };
 
+struct light {
+    Eigen::Vector3f position;
+    Eigen::Vector3f intensity;
+};
+
+auto vertex_shader(const vertex_shader_payload &payload) -> Eigen::Vector3f;
+auto normal_fragment_shader(const fragment_shader_payload &payload)
+-> Eigen::Vector3f;
+auto phong_fragment_shader(const fragment_shader_payload &payload)
+-> Eigen::Vector3f;
+auto texture_fragment_shader(const fragment_shader_payload &payload)
+-> Eigen::Vector3f;
+auto displacement_fragment_shader(const fragment_shader_payload &payload)
+-> Eigen::Vector3f;
+auto bump_fragment_shader(const fragment_shader_payload &payload)
+-> Eigen::Vector3f;
+
+
 #endif // RASTERIZER_SHADER_H
