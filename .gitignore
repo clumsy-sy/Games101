@@ -4,3 +4,4 @@
 *.epub
 **/cmake-build*/
 *.idea/
+test/
