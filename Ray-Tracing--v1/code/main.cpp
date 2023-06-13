@@ -2,20 +2,30 @@
 #include "global.hpp"
 #include "ray.hpp"
 
-auto hit_sphere(const point3 &center, double radius, const ray &r) -> bool {
+auto hit_sphere(const point3 &center, double radius, const ray &r) -> double {
   Vec3d oc = r.origin() - center;
   auto a = dot(r.direction(), r.direction());
   auto b = 2.0 * dot(oc, r.direction());
   auto c = dot(oc, oc) - radius * radius;
   auto discriminant = b * b - 4 * a * c;
-  return (discriminant > 0);
+  if (discriminant < 0) {
+    return -1.0;
+  } else {
+    // 球在摄像机前方，第一次照射到的必然是 t 小的那个
+    return (-b - sqrt(discriminant)) / (2.0 * a);
+  }
 }
 
 auto ray_color(const ray &r) -> color {
-  if (hit_sphere(point3(0, 0, -1), 0.5, r))
-    return {1, 0, 0};
+  auto t = hit_sphere(point3(0, 0, -1), 0.5, r);
+  // 光线照射到小球
+  if (t > 0.0) {
+    Vec3d N = unit_vector(r.at(t) - Vec3d(0, 0, -1));
+    return 0.5 * color(N.x + 1, N.y + 1, N.z + 1);
+  }
+  // 背景
   Vec3d unit_direction = unit_vector(r.direction());
-  auto t = 0.5 * (unit_direction.y + 1.0);
+  t = 0.5 * (unit_direction.y + 1.0);
   return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
 }
 
@@ -48,7 +58,7 @@ auto main() -> int {
     }
     UpdateProgress(j, image_height - 1);
   }
-  photo.generate("image3.bmp");
+  photo.generate("image4.bmp");
 
   return 0;
 }

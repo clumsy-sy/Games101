@@ -104,3 +104,11 @@ inline auto solveQuadratic(const double &a, const double &b, const double &c, do
   return true;
 }
 ```
+![Alt](images/image3.bmp)
+
+### 表面法线（surface normals）
+
+一般来说，是球心指向表面一点的单位向量就是该点的法线，用一些方法让单位法线显示出来
+
+![Alt](images/image4.bmp)
+
