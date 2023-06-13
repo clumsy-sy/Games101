@@ -221,7 +221,7 @@ void rst::rasterizer::draw(std::vector<Triangle *> &TriangleList) {
       vec.y() /= vec.w();
       vec.z() /= vec.w();
     }
-
+    // 求逆矩阵后转置
     Eigen::Matrix4f inv_trans = (view * model).inverse().transpose();
     std::array<Eigen::Vector4f, 3> n = {inv_trans * to_vec4(t->normal[0], 0.0f),
                                         inv_trans * to_vec4(t->normal[1], 0.0f),

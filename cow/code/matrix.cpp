@@ -23,10 +23,10 @@ auto matrix::mat::get_model_matrix(float rotation_angle) -> Eigen::Matrix4f {
   Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
   double rad = aTOr(rotation_angle);
   // clang-format off
-    // model << cos(rad), -sin(rad), 0, 0,
-    //          sin(rad), cos(rad), 0, 0,
-    //          0, 0, 1, 0,
-    //          0, 0, 0, 1;
+  // model << cos(rad), -sin(rad), 0, 0,
+  //          sin(rad), cos(rad), 0, 0,
+  //          0, 0, 1, 0,
+  //          0, 0, 0, 1;
   model << cos(rad), 0, sin(rad), 0,
            0, 1, 0, 0,
            -sin(rad), 0, cos(rad), 0,
