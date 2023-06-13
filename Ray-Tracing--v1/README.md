@@ -52,12 +52,26 @@ auto main() -> int {
 ![Alt](images/image1.bmp)
 
 
-## 
+## 路径追踪
 
 ### 封装 Vec3d 类
 
-与原文不同，d 代表 double 以表示存储的变量类型。
+与原文不同，多加了字母 `d` 代表 `double` 以表示存储的变量类型。
+既可以用来表示点，又可以用来表示颜色
 
+### 封装射线类
 
+把射线看作一个函数, A 是原点，B 是射线方向
+$$
+P(t) = A + t \cdot B (t \ge 0)
+$$
 
+将摄像机放在坐标原点，向 -z 方向看，y 轴朝上，z 轴朝右，从左下角（书上说左上角，但是实际上是左下角，这与 bmp 格式非常符合）开始遍历像素，从原点作为光线原点，向像素点方向发出射线，得到返回值。
+
+单线性插值
+$$
+lerp = (1 - t) \cdot startValue + t \cdot endValue (0.0 \leqslant t \leqslant 1.0)
+$$
+
+![Alt](images/image2.bmp)
 

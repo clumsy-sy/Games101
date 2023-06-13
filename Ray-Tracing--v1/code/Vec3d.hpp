@@ -93,11 +93,12 @@ inline auto cross(const Vec3d &a, const Vec3d &b) -> Vec3d {
 }
 inline auto unit_vector(Vec3d v) -> Vec3d { return v / v.length(); }
 // 求镜面反射光线方向向量
-auto reflect(const Vec3d &v, const Vec3d &n) -> Vec3d {
+inline auto reflect(const Vec3d &v, const Vec3d &n) -> Vec3d {
   return v - 2 * dot(v, n) * n;
 }
 // 聂耳定律
-auto refract(const Vec3d &uv, const Vec3d &n, double etai_over_etat) -> Vec3d {
+inline auto refract(const Vec3d &uv, const Vec3d &n, double etai_over_etat)
+    -> Vec3d {
   auto cos_theta = std::fmin(dot(-uv, n), 1.0);
   Vec3d r_out_perp = etai_over_etat * (uv + cos_theta * n);
   Vec3d r_out_parallel =
@@ -108,7 +109,7 @@ auto refract(const Vec3d &uv, const Vec3d &n, double etai_over_etat) -> Vec3d {
 /*
   随机生成一个在单位圆内的点
 */
-auto random_in_unit_sphere() -> Vec3d {
+inline auto random_in_unit_sphere() -> Vec3d {
   while (true) {
     auto p = Vec3d::random(-1, 1);
     if (p.length_squared() >= 1)
@@ -116,11 +117,11 @@ auto random_in_unit_sphere() -> Vec3d {
     return p;
   }
 }
-auto random_unit_vector() -> Vec3d {
+inline auto random_unit_vector() -> Vec3d {
   return unit_vector(random_in_unit_sphere());
 }
 
-auto random_in_hemisphere(const Vec3d &normal) -> Vec3d {
+inline auto random_in_hemisphere(const Vec3d &normal) -> Vec3d {
   Vec3d in_unit_sphere = random_in_unit_sphere();
   if (dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
     return in_unit_sphere;
@@ -135,6 +136,10 @@ auto random_in_unit_disk() -> Vec3d {
       continue;
     return p;
   }
+}
+
+inline auto lerp(const Vec3d &a, const Vec3d &b, const float &t) -> Vec3d {
+  return a * (1 - t) + b * t;
 }
 // point3 and color can use vector to representation
 using point3 = Vec3d;
