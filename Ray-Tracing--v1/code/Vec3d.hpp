@@ -62,7 +62,9 @@ public:
   [[nodiscard]] auto length_squared() const -> double {
     return x * x + y * y + z * z;
   }
-  [[nodiscard]] auto length() const -> double { return sqrt(length_squared()); }
+  [[nodiscard]] auto length() const -> double {
+    return std::sqrt(length_squared());
+  }
   inline static auto random() -> Vec3d {
     return {random_double(), random_double(), random_double()};
   }
@@ -74,31 +76,32 @@ public:
   [[nodiscard]] auto near_zero() const -> bool {
     // Return true if the vector is close to zero in all dimensions.
     const auto s = 1e-8;
-    return (fabs(x) < s) && (fabs(y) < s) && (fabs(z) < s);
+    return (std::fabs(x) < s) && (std::fabs(y) < s) && (std::fabs(z) < s);
   }
 };
 
 inline auto sqrt(Vec3d &v) -> void {
-  v.x = sqrt(v.x), v.y = sqrt(v.y), v.z = sqrt(v.z);
+  v.x = std::sqrt(v.x), v.y = std::sqrt(v.y), v.z = std::sqrt(v.z);
 }
 
-inline auto dotProduct(const Vec3d &a, const Vec3d &b) -> double {
+inline auto dot(const Vec3d &a, const Vec3d &b) -> double {
   return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-inline auto crossProduct(const Vec3d &a, const Vec3d &b) -> Vec3d {
+inline auto cross(const Vec3d &a, const Vec3d &b) -> Vec3d {
   return {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x};
 }
 inline auto unit_vector(Vec3d v) -> Vec3d { return v / v.length(); }
 // 求镜面反射光线方向向量
 auto reflect(const Vec3d &v, const Vec3d &n) -> Vec3d {
-  return v - 2 * dotProduct(v, n) * n;
+  return v - 2 * dot(v, n) * n;
 }
 // 聂耳定律
 auto refract(const Vec3d &uv, const Vec3d &n, double etai_over_etat) -> Vec3d {
-  auto cos_theta = fmin(dotProduct(-uv, n), 1.0);
+  auto cos_theta = std::fmin(dot(-uv, n), 1.0);
   Vec3d r_out_perp = etai_over_etat * (uv + cos_theta * n);
-  Vec3d r_out_parallel = -sqrt(fabs(1.0 - r_out_perp.length_squared())) * n;
+  Vec3d r_out_parallel =
+      -std::sqrt(std::fabs(1.0 - r_out_perp.length_squared())) * n;
   return r_out_perp + r_out_parallel;
 }
 
@@ -119,8 +122,7 @@ auto random_unit_vector() -> Vec3d {
 
 auto random_in_hemisphere(const Vec3d &normal) -> Vec3d {
   Vec3d in_unit_sphere = random_in_unit_sphere();
-  if (dotProduct(in_unit_sphere, normal) >
-      0.0) // In the same hemisphere as the normal
+  if (dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
     return in_unit_sphere;
   else
     return -in_unit_sphere;
@@ -134,7 +136,7 @@ auto random_in_unit_disk() -> Vec3d {
     return p;
   }
 }
-
+// point3 and color can use vector to representation
 using point3 = Vec3d;
 using color = Vec3d;
 

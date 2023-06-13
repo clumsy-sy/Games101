@@ -8,6 +8,7 @@
   输出 bmp 格式的图像 !! bmp 是（ b, g, r) 暂时只支持 24
   位格式，由于需要对齐，所以现在的宽度需要是 4 的倍数(偷懒了)
 */
+#include "Vec3d.hpp"
 #include <array>
 #include <cassert>
 #include <cstdint>
@@ -16,7 +17,6 @@
 #include <span>
 #include <string>
 #include <vector>
-#include "Vec3d.hpp"
 
 namespace bmp {
 struct BMP_FILE_HEADER {
@@ -40,49 +40,90 @@ struct BMP_INFO_HEADER {
   unsigned int biClrImportant = 0; /* Number of important colors */
 };
 
-void WriteBMP(int width, int height, std::span<std::uint8_t> img,
-              const std::string &filename) {
+class bitmap {
+public:
+  int width, height;
+  std::vector<std::array<std::uint8_t, 3>> image;
 
-  if (width % 4) {
-    std::cerr << "width is not a multiple of 4" << std::endl;
-    exit(-1);
+public:
+  bitmap() = default;
+  bitmap(int w, int h) : width(w), height(h) { image.resize(width * height); }
+  auto get(int x, int y) -> std::array<std::uint8_t, 3> & {
+    return image[y * width + x];
   }
+  auto set(int x, int y, color pixel_color) {
+    image[y * width + x] = {
+        static_cast<unsigned char>(255.999 * clamp(pixel_color.z, 0.0, 0.999)),
+        static_cast<unsigned char>(255.999 * clamp(pixel_color.y, 0.0, 0.999)),
+        static_cast<unsigned char>(255.999 * clamp(pixel_color.x, 0.0, 0.999))};
+  }
+  auto generate(const std::string &filename) {
+    if (width % 4) {
+      std::cerr << "width is not a multiple of 4" << std::endl;
+      exit(-1);
+    }
+    std::ofstream bmp(filename, std::ios::out);
 
-  std::ofstream bmp(filename, std::ios::out);
+    BMP_FILE_HEADER fileh;
+    BMP_INFO_HEADER infoh;
 
-  BMP_FILE_HEADER fileh;
-  BMP_INFO_HEADER infoh;
+    unsigned short bfType = 0x4D42;
+    fileh.bfSize = 2 + sizeof(fileh) + sizeof(infoh) + width * height * 3;
 
-  unsigned short bfType = 0x4D42;
-  fileh.bfSize = 2 + sizeof(fileh) + sizeof(infoh) + width * height * 3;
+    infoh.biWidth = width;
+    infoh.biHeight = height;
 
-  infoh.biWidth = width;
-  infoh.biHeight = height;
+    bmp.write(reinterpret_cast<char *>(&bfType), sizeof(bfType));
+    bmp.write(reinterpret_cast<char *>(&fileh), sizeof(fileh));
+    bmp.write(reinterpret_cast<char *>(&infoh), sizeof(infoh));
+    bmp.write(reinterpret_cast<char *>(image.data()), image.size() * 3);
+  }
+  auto generate() { generate("output.bmp"); }
+};
 
-  bmp.write(reinterpret_cast<char *>(&bfType), sizeof(bfType));
-  bmp.write(reinterpret_cast<char *>(&fileh), sizeof(fileh));
-  bmp.write(reinterpret_cast<char *>(&infoh), sizeof(infoh));
-  bmp.write(reinterpret_cast<char *>(img.data()), img.size());
-}
-auto write_color_bmp(color pixel_color, std::array<std::uint8_t, 3> &now)
-    -> void {
-  now = {static_cast<unsigned char>(256 * pixel_color.z),
-         static_cast<unsigned char>(256 * pixel_color.y),
-         static_cast<unsigned char>(256 * pixel_color.x)};
-}
+// void writeToBMP(int width, int height, std::span<std::uint8_t> img,
+//                 const std::string &filename) {
 
-void write_color_bmp(color pixel_color, std::array<std::uint8_t, 3> &now,
-                     int samples_per_pixel) {
-  // Divide the color by the number of samples.
-  auto scale = 1.0 / samples_per_pixel;
-  pixel_color *= scale;
-  // gamma Correction to accurate color intensity
-  sqrt(pixel_color);
-  // Write the translated [0,255] value of each color component.
-  now = {static_cast<unsigned char>(256 * clamp(pixel_color.z, 0.0, 0.999)),
-         static_cast<unsigned char>(256 * clamp(pixel_color.y, 0.0, 0.999)),
-         static_cast<unsigned char>(256 * clamp(pixel_color.x, 0.0, 0.999))};
-}
+//   if (width % 4) {
+//     std::cerr << "width is not a multiple of 4" << std::endl;
+//     exit(-1);
+//   }
+
+//   std::ofstream bmp(filename, std::ios::out);
+
+//   BMP_FILE_HEADER fileh;
+//   BMP_INFO_HEADER infoh;
+
+//   unsigned short bfType = 0x4D42;
+//   fileh.bfSize = 2 + sizeof(fileh) + sizeof(infoh) + width * height * 3;
+
+//   infoh.biWidth = width;
+//   infoh.biHeight = height;
+
+//   bmp.write(reinterpret_cast<char *>(&bfType), sizeof(bfType));
+//   bmp.write(reinterpret_cast<char *>(&fileh), sizeof(fileh));
+//   bmp.write(reinterpret_cast<char *>(&infoh), sizeof(infoh));
+//   bmp.write(reinterpret_cast<char *>(img.data()), img.size());
+// }
+// auto write_color_bmp(color pixel_color, std::array<std::uint8_t, 3> &now)
+//     -> void {
+//   now = {static_cast<unsigned char>(255.999 * pixel_color.z),
+//          static_cast<unsigned char>(255.999 * pixel_color.y),
+//          static_cast<unsigned char>(255.999 * pixel_color.x)};
+// }
+
+// void write_color_bmp(color pixel_color, std::array<std::uint8_t, 3> &now,
+//                      int samples_per_pixel) {
+//   // Divide the color by the number of samples.
+//   auto scale = 1.0 / samples_per_pixel;
+//   pixel_color *= scale;
+//   // gamma Correction to accurate color intensity
+//   sqrt(pixel_color);
+//   // Write the translated [0,255] value of each color component.
+//   now = {static_cast<unsigned char>(256 * clamp(pixel_color.z, 0.0, 0.999)),
+//          static_cast<unsigned char>(256 * clamp(pixel_color.y, 0.0, 0.999)),
+//          static_cast<unsigned char>(256 * clamp(pixel_color.x, 0.0, 0.999))};
+// }
 } // namespace bmp
 
 #endif

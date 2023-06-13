@@ -28,7 +28,8 @@ inline auto random_double(double min, double max) -> double {
   return distribution(generator);
 }
 
-inline auto clamp(const double &x, const double &min, const double &max) -> double {
+inline auto clamp(const double &x, const double &min, const double &max)
+    -> double {
   if (x < min)
     return min;
   if (x > max)
