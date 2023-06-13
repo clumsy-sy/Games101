@@ -75,3 +75,32 @@ $$
 
 ![Alt](images/image2.bmp)
 
+### 球体
+
+光线 $(\mathbf{O}, \mathbf{D})$ 与球体 $(C_x, C_y, C_z)$ 半径 $r$ 的交, 光线上有一点 $P = O + tD$ 与球相交
+$$
+\begin{aligned}
+  (P_x-C_x)^2 + (P_y-C_y)^2 + (P_z-C_z)^2 = r^2 \\
+  (\mathbf{P} - \mathbf{C})^2 = r^2 \\
+  (\mathbf{O} + t\mathbf{D} - \mathbf{C})^2 = r^2 \\
+  \mathbf{D}^2 \cdot \mathbf{t} + 2 \mathbf{D}\cdot (\mathbf{A} - \mathbf{C}) + (\mathbf{A} - \mathbf{C})^2 = r^2
+\end{aligned}
+$$
+所以求管线与圆的焦点就是求解二元一次方程，用求根公式即可
+
+```cpp
+inline auto solveQuadratic(const double &a, const double &b, const double &c, double &x0, double &x1) -> bool {
+  double discr = b * b - 4 * a * c;
+  if (discr < 0)
+    return false;
+  else if (discr == 0)
+    x0 = x1 = -0.5 * b / a;
+  else {
+    double q = (b > 0) ? -0.5 * (b + std::sqrt(discr)) : -0.5 * (b - std::sqrt(discr));
+    x0 = q / a, x1 = c / q;
+  }
+  if (x0 > x1)
+    std::swap(x0, x1);
+  return true;
+}
+```
