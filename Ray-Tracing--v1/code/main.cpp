@@ -16,8 +16,23 @@ auto hit_sphere(const point3 &center, double radius, const ray &r) -> double {
   }
 }
 
+auto hit_sphere_halfb(const point3 &center, double radius, const ray &r)
+    -> double {
+  Vec3d oc = r.origin() - center;
+  auto a = r.direction().length_squared();
+  auto half_b = dot(oc, r.direction());
+  auto c = oc.length_squared() - radius * radius;
+  // auto discriminant = half_b * half_b - a * c;
+  double x0, x1;
+  if (solveQuadratic_halfb(a, half_b, c, x0, x1)) {
+    return x1;
+  } else {
+    return -1.0;
+  }
+}
+
 auto ray_color(const ray &r) -> color {
-  auto t = hit_sphere(point3(0, 0, -1), 0.5, r);
+  auto t = hit_sphere_halfb(point3(0, 0, -1), 0.5, r);
   // 光线照射到小球
   if (t > 0.0) {
     Vec3d N = unit_vector(r.at(t) - Vec3d(0, 0, -1));

@@ -56,6 +56,24 @@ inline auto solveQuadratic(const double &a, const double &b, const double &c,
   return true;
 }
 
+inline auto solveQuadratic_halfb(const double &a, const double &half_b,
+                                 const double &c, double &x0, double &x1)
+    -> bool {
+  double discr = half_b * half_b - a * c;
+  if (discr < 0)
+    return false;
+  else if (discr == 0)
+    x0 = x1 = -half_b / a;
+  else {
+    double q = -half_b + std::sqrt(discr);
+    x0 = q / a;
+    x1 = c / q;
+  }
+  if (x0 > x1)
+    std::swap(x0, x1);
+  return true;
+}
+
 inline void UpdateProgress(double progress) {
   int barWidth = 100;
 

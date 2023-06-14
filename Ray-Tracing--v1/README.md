@@ -62,6 +62,7 @@ auto main() -> int {
 ### 封装射线类
 
 把射线看作一个函数, A 是原点，B 是射线方向
+
 $$
 P(t) = A + t \cdot B (t \ge 0)
 $$
@@ -69,6 +70,7 @@ $$
 将摄像机放在坐标原点，向 -z 方向看，y 轴朝上，z 轴朝右，从左下角（书上说左上角，但是实际上是左下角，这与 bmp 格式非常符合）开始遍历像素，从原点作为光线原点，向像素点方向发出射线，得到返回值。
 
 单线性插值
+
 $$
 lerp = (1 - t) \cdot startValue + t \cdot endValue (0.0 \leqslant t \leqslant 1.0)
 $$
@@ -78,6 +80,7 @@ $$
 ### 球体
 
 光线 $(\mathbf{O}, \mathbf{D})$ 与球体 $(C_x, C_y, C_z)$ 半径 $r$ 的交, 光线上有一点 $P = O + tD$ 与球相交
+
 $$
 \begin{aligned}
   (P_x-C_x)^2 + (P_y-C_y)^2 + (P_z-C_z)^2 = r^2 \\
@@ -86,7 +89,8 @@ $$
   \mathbf{D}^2 \cdot \mathbf{t} + 2 \mathbf{D}\cdot (\mathbf{A} - \mathbf{C}) + (\mathbf{A} - \mathbf{C})^2 = r^2
 \end{aligned}
 $$
-所以求管线与圆的焦点就是求解二元一次方程，用求根公式即可
+
+所以求管线与圆的焦点就是求解一元二次方程，用求根公式即可
 
 ```cpp
 inline auto solveQuadratic(const double &a, const double &b, const double &c, double &x0, double &x1) -> bool {
@@ -112,3 +116,36 @@ inline auto solveQuadratic(const double &a, const double &b, const double &c, do
 
 ![Alt](images/image4.bmp)
 
+### 优化求根公式
+
+令 $b = 2h$
+
+$$
+x = \dfrac{-h \pm \sqrt{h^2 - ac}}{a}
+$$
+
+这个 `half_b` 在加上韦达定理确实可以减少开销。
+
+```cpp
+inline auto solveQuadratic_halfb(const double &a, const double &half_b, 
+              const double &c, double &x0, double &x1) -> bool {
+  double discr = half_b * half_b - a * c;
+  if (discr < 0)
+    return false;
+  else if (discr == 0)
+    x0 = x1 = -half_b / a;
+  else {
+    double q = -half_b + std::sqrt(discr);
+    x0 = q / a; x1 = c / q;
+  }
+  if (x0 > x1)
+    std::swap(x0, x1);
+  return true;
+}
+```
+
+### 法线的朝向
+
+在 hit_record 中，光线与球面的交点的法线是始终向外的，因为法线是 $(Point - Center)$ 得到的。
+
+如果所有的法线都是朝外的，这样就可以通过和光线的点积判断，光线是否在球的内部。
