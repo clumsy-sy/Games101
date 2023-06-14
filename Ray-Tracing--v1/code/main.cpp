@@ -1,46 +1,17 @@
 #include "BMP.hpp"
 #include "global.hpp"
+#include "hittable.hpp"
+#include "hittablelist.hpp"
 #include "ray.hpp"
+#include "sphere.hpp"
 
-auto hit_sphere(const point3 &center, double radius, const ray &r) -> double {
-  Vec3d oc = r.origin() - center;
-  auto a = dot(r.direction(), r.direction());
-  auto b = 2.0 * dot(oc, r.direction());
-  auto c = dot(oc, oc) - radius * radius;
-  auto discriminant = b * b - 4 * a * c;
-  if (discriminant < 0) {
-    return -1.0;
-  } else {
-    // 球在摄像机前方，第一次照射到的必然是 t 小的那个
-    return (-b - sqrt(discriminant)) / (2.0 * a);
+auto ray_color(const ray &r, const hittable &world) -> color {
+  hit_record rec;
+  if (world.hit(r, 0, infinity, rec)) {
+    return 0.5 * (rec.normal + color(1, 1, 1));
   }
-}
-
-auto hit_sphere_halfb(const point3 &center, double radius, const ray &r)
-    -> double {
-  Vec3d oc = r.origin() - center;
-  auto a = r.direction().length_squared();
-  auto half_b = dot(oc, r.direction());
-  auto c = oc.length_squared() - radius * radius;
-  // auto discriminant = half_b * half_b - a * c;
-  double x0, x1;
-  if (solveQuadratic_halfb(a, half_b, c, x0, x1)) {
-    return x1;
-  } else {
-    return -1.0;
-  }
-}
-
-auto ray_color(const ray &r) -> color {
-  auto t = hit_sphere_halfb(point3(0, 0, -1), 0.5, r);
-  // 光线照射到小球
-  if (t > 0.0) {
-    Vec3d N = unit_vector(r.at(t) - Vec3d(0, 0, -1));
-    return 0.5 * color(N.x + 1, N.y + 1, N.z + 1);
-  }
-  // 背景
   Vec3d unit_direction = unit_vector(r.direction());
-  t = 0.5 * (unit_direction.y + 1.0);
+  auto t = 0.5 * (unit_direction.y + 1.0);
   return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
 }
 
@@ -50,8 +21,12 @@ auto main() -> int {
   const int image_width = 400;
   const int image_height = static_cast<int>(image_width / aspect_ratio);
 
-  // Camera
+  // World
+  hittable_list world;
+  world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
+  world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
 
+  // Camera
   auto viewport_height = 2.0;
   auto viewport_width = aspect_ratio * viewport_height;
   auto focal_length = 1.0;
@@ -68,12 +43,12 @@ auto main() -> int {
       auto u = double(i) / (image_width - 1);
       auto v = double(j) / (image_height - 1);
       ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin);
-      color pixel_color = ray_color(r);
+      color pixel_color = ray_color(r, world);
       photo.set(i, j, pixel_color);
     }
     UpdateProgress(j, image_height - 1);
   }
-  photo.generate("image4.bmp");
+  photo.generate("image5.bmp");
 
   return 0;
 }
