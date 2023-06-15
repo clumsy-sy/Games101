@@ -149,3 +149,49 @@ inline auto solveQuadratic_halfb(const double &a, const double &half_b,
 在 hit_record 中，光线与球面的交点的法线是始终向外的，因为法线是 $(Point - Center)$ 得到的。
 
 如果所有的法线都是朝外的，这样就可以通过和光线的点积判断，光线是否在球的内部。
+
+### 漫反射材料
+
+表面越深，光被吸收的可能性越大，反射方向是随机的。
+
+随机方法：在于球面交点的法线方向做一个于球面相切的单位圆，然后在单位圆内随机一点，作为反射光的方向。
+
+限制递归层数，后递归求解。
+
+由于这里的计算量比较大，所有启用了多线程，同时也加大了图片尺寸和单像素采样数，以达到更好的采样效果
+
+以下是几种漫反射
+
+![Alt](images/image7.bmp)
+
+![Alt](images/image8.bmp)
+
+![Alt](images/image9.bmp)
+
+![Alt](images/image10.bmp)
+
+### 材质
+
+封装材料类
+
+![Alt](images/image11.bmp)
+
+加上模糊系数后
+
+![Alt](images/image12.bmp)
+
+### 聂耳定律
+
+折射定律，其中是 $\theta$ 光线与法线的夹角，$\eta$ 是折射率 (空气 1.0，玻璃 1.3 - 1.7，砖石 2.4)
+
+$$
+ \eta \sin{\theta} = \eta' \sin{\theta}'
+$$
+
+为了求解折射光线的方向
+
+$$
+ \sin{\theta}' = \dfrac{\eta}{\eta'} \sin{\theta}
+$$
+
+

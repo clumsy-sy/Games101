@@ -1,7 +1,9 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "Vec3d.hpp"
+#include <utility>
+
+#include "Vec3dx4.hpp"
 #include "hittable.hpp"
 
 class sphere : public hittable {
@@ -9,17 +11,17 @@ class sphere : public hittable {
 public:
   point3 center;
   double radius, radius2;
+  std::shared_ptr<material> mat_ptr;
 
 public:
   sphere() = default;
-  sphere(point3 c, double r) : center(c), radius(r), radius2(r * r){};
+  sphere(point3 c, double r, std::shared_ptr<material> m)
+      : center(c), radius(r), radius2(r * r), mat_ptr(std::move(m)){};
 
-  auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const
-      -> bool override;
+  auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
 };
 
-auto sphere::hit(const ray &r, double t_min, double t_max,
-                 hit_record &rec) const -> bool {
+auto sphere::hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool {
   Vec3d oc = r.origin() - center;
   auto a = r.direction().length_squared();
   auto half_b = dot(oc, r.direction());
@@ -40,6 +42,7 @@ auto sphere::hit(const ray &r, double t_min, double t_max,
   rec.p = r.at(rec.t);
   Vec3d outward_normal = (rec.p - center) / radius;
   rec.set_face_normal(r, outward_normal);
+  rec.mat_ptr = mat_ptr;
 
   return true;
 }

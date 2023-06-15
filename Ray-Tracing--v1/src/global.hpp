@@ -10,6 +10,7 @@
 // Constants
 const double infinity = std::numeric_limits<double>::infinity();
 const double pi = 3.1415926535897932385;
+const double esp = 1e-8;
 
 // Utility Functions
 
@@ -18,18 +19,19 @@ inline auto degrees_to_radians(double degrees) -> double {
 }
 
 inline auto random_double() -> double {
-  static std::uniform_real_distribution<double> distribution(0.0, 1.0);
-  static std::mt19937 generator;
+  thread_local std::uniform_real_distribution<double> distribution(0.0, 1.0);
+  thread_local std::mt19937 generator{std::random_device{}()};
   return distribution(generator);
 }
-inline auto random_double(double min, double max) -> double {
-  static std::mt19937 generator;
-  static std::uniform_real_distribution<double> distribution(min, max);
-  return distribution(generator);
+inline auto random_double(double min, double max) -> auto{
+  return [min, max]() -> double {
+    thread_local std::uniform_real_distribution<double> distribution(min, max);
+    thread_local std::mt19937 generator{std::random_device{}()};
+    return distribution(generator);
+  };
 }
 
-inline auto clamp(const double &x, const double &min, const double &max)
-    -> double {
+inline auto clamp(const double &x, const double &min, const double &max) -> double {
   if (x < min)
     return min;
   if (x > max)
@@ -38,16 +40,14 @@ inline auto clamp(const double &x, const double &min, const double &max)
 }
 
 // 求根公式
-inline auto solveQuadratic(const double &a, const double &b, const double &c,
-                           double &x0, double &x1) -> bool {
+inline auto solveQuadratic(const double &a, const double &b, const double &c, double &x0, double &x1) -> bool {
   double discr = b * b - 4 * a * c;
   if (discr < 0)
     return false;
   else if (discr == 0)
     x0 = x1 = -0.5 * b / a;
   else {
-    double q =
-        (b > 0) ? -0.5 * (b + std::sqrt(discr)) : -0.5 * (b - std::sqrt(discr));
+    double q = (b > 0) ? -0.5 * (b + std::sqrt(discr)) : -0.5 * (b - std::sqrt(discr));
     x0 = q / a;
     x1 = c / q;
   }
@@ -56,8 +56,7 @@ inline auto solveQuadratic(const double &a, const double &b, const double &c,
   return true;
 }
 
-inline auto solveQuadratic_halfb(const double &a, const double &half_b,
-                                 const double &c, double &x0, double &x1)
+inline auto solveQuadratic_halfb(const double &a, const double &half_b, const double &c, double &x0, double &x1)
     -> bool {
   double discr = half_b * half_b - a * c;
   if (discr < 0)
@@ -91,21 +90,8 @@ inline void UpdateProgress(double progress) {
   std::cout.flush();
 }
 
-inline void UpdateProgress(double now, double total) {
-  int barWidth = 100;
-  double progress = now / total;
-  std::cout << "[";
-  int pos = barWidth * progress;
-  for (int i = 0; i < barWidth; ++i) {
-    if (i < pos)
-      std::cout << "=";
-    else if (i == pos)
-      std::cout << ">";
-    else
-      std::cout << " ";
-  }
-  std::cout << "] " << int(progress * 100.0) << " %\r";
-  std::cout.flush();
+inline void UpdateProgress(std::int32_t now, std::int32_t total) {
+  UpdateProgress(double(now) / total);
 }
 
 #endif

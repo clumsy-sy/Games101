@@ -1,12 +1,15 @@
 #ifndef HITTABLE_HPP
 #define HITTABLE_HPP
 
-#include "Vec3d.hpp"
+#include "Vec3dx4.hpp"
 #include "ray.hpp"
+
+class material;
 
 struct hit_record {
   point3 p;
   Vec3d normal;
+  std::shared_ptr<material> mat_ptr;
   double t;
   bool front_face;
 
@@ -18,8 +21,7 @@ struct hit_record {
 
 class hittable {
 public:
-  virtual auto hit(const ray &r, double t_min, double t_max,
-                   hit_record &rec) const -> bool = 0;
+  virtual auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool = 0;
 };
 
 #endif

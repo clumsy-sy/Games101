@@ -15,17 +15,21 @@ public:
 
 public:
   hittable_list() = default;
-  hittable_list(const shared_ptr<hittable> &object) { add(object); }
+  hittable_list(const shared_ptr<hittable> &object) {
+    add(object);
+  }
 
-  void clear() { objects.clear(); }
-  void add(const shared_ptr<hittable> &object) { objects.push_back(object); }
+  void clear() {
+    objects.clear();
+  }
+  void add(const shared_ptr<hittable> &object) {
+    objects.push_back(object);
+  }
 
-  auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const
-      -> bool override;
+  auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
 };
 
-auto hittable_list::hit(const ray &r, double t_min, double t_max,
-                        hit_record &rec) const -> bool {
+auto hittable_list::hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool {
   hit_record temp_rec;
   bool hit_anything = false;
   auto closest_so_far = t_max;
