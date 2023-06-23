@@ -11,8 +11,8 @@ private:
   point3 lower_left_corner;
   Vec3d horizontal;
   Vec3d vertical;
-  Vec3d u, v, w;
-  double lens_radius;
+  Vec3d u, v, w;        // w:看向方向，u：镜头平面的 x，v：镜头屏幕的 y
+  double lens_radius;   // 镜头半径
 
 public:
   camera() = default;
@@ -35,7 +35,7 @@ public:
     lens_radius = aperture / 2;
   }
   [[nodiscard]] auto get_ray(double s, double t) const -> ray {
-    Vec3d rd = lens_radius * random_in_unit_disk();
+    Vec3d rd = lens_radius * random_in_unit_disk(); // 镜头中随机一个点
     Vec3d offset = u * rd.x() + v * rd.y();
 
     return ray(origin + offset, lower_left_corner + s * horizontal + t * vertical - origin - offset);

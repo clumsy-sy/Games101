@@ -194,4 +194,11 @@ $$
  \sin{\theta}' = \dfrac{\eta}{\eta'} \sin{\theta}
 $$
 
+### 摄像机
+
+主要是决定发出光线的方向
+
+透镜可以产生一些景深感，其实就是在光圈内容随机光线，使得焦点位置比较清晰
+
+![Alt](images/imagefinal.bmp)
 
