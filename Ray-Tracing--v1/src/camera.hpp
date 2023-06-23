@@ -17,7 +17,7 @@ private:
 public:
   camera() = default;
   camera(
-      point3 lookfrom, point3 lookat, Vec3d vup, double vfov, double aspect_ratio, double aperture, double focus_dist) {
+      const point3& lookfrom, const point3& lookat, const Vec3d& vup, double vfov, double aspect_ratio, double aperture, double focus_dist) {
     auto theta = degrees_to_radians(vfov);
     auto h = tan(theta / 2);
     auto viewport_height = 2.0 * h;

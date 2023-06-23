@@ -1,6 +1,3 @@
-/*
-  by sy 2023/6/5
-*/
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 #include "global.hpp"
@@ -11,7 +8,6 @@
 /*
   向量
 */
-
 class Vec3d {
 public:
   using f64x4 = simd<double, 4>;
@@ -24,7 +20,6 @@ public:
   Vec3d(const f64x4 &other) : e{other} {}
 
   auto operator-() const -> Vec3d {
-    // return {-x, -y, -z};
     return -e;
   }
   auto operator[](int i) const -> double {
