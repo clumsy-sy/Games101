@@ -53,7 +53,7 @@ public:
   auto get(int x, int y) -> std::array<std::uint8_t, 3> & {
     return image[y * width + x];
   }
-  auto set(int x, int y, const color& pixel_color) {
+  auto set(int x, int y, const color &pixel_color) {
     image[y * width + x] = {static_cast<unsigned char>(255.999 * clamp(pixel_color.z(), 0.0, 0.999)),
         static_cast<unsigned char>(255.999 * clamp(pixel_color.y(), 0.0, 0.999)),
         static_cast<unsigned char>(255.999 * clamp(pixel_color.x(), 0.0, 0.999))};

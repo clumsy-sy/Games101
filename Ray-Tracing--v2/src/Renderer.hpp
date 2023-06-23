@@ -26,7 +26,7 @@ public:
 
 public:
   Renderer() = default;
-  Renderer(hittable_list &hitlist) : world(hitlist) {};
+  Renderer(hittable_list &hitlist) : world(hitlist){};
   Renderer(hittable_list &hitlist, double ratio, uint32_t width)
       : world(hitlist), aspect_ratio(ratio), image_width(width) {
     image_height = static_cast<uint32_t>(image_width / aspect_ratio);

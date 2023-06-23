@@ -6,6 +6,7 @@
 #include "lambertian.hpp"
 #include "metal.hpp"
 #include "sphere.hpp"
+#include "moving_sphere.hpp"
 
 auto random_scene() -> hittable_list {
   hittable_list world;
@@ -25,7 +26,8 @@ auto random_scene() -> hittable_list {
           // diffuse
           auto albedo = color::random() * color::random();
           sphere_material = std::make_shared<lambertian>(albedo);
-          world.add(std::make_shared<sphere>(center, 0.2, sphere_material));
+          auto center2 = center + Vec3d(0, random_double(0, .5)(), 0);
+          world.add(make_shared<moving_sphere>(center, center2, 0.0, 1.0, 0.2, sphere_material));
         } else if (choose_mat < 0.95) {
           // metal
           auto albedo = color::random(0.5, 1);
