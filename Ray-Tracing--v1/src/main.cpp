@@ -19,7 +19,7 @@ auto main(int argc, const char **argv) -> int {
   point3 lookat(0, 0, 0);
   Vec3d vup(0, 1, 0);
   // auto dist_to_focus = 10.0
-  auto dist_to_focus = (lookfrom-lookat).length();
+  auto dist_to_focus = (lookfrom - lookat).length();
   auto aperture = 0.1;
 
   camera cam(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus);

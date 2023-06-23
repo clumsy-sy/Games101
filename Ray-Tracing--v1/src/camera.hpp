@@ -11,13 +11,13 @@ private:
   point3 lower_left_corner;
   Vec3d horizontal;
   Vec3d vertical;
-  Vec3d u, v, w;        // w:看向方向，u：镜头平面的 x，v：镜头屏幕的 y
-  double lens_radius;   // 镜头半径
+  Vec3d u, v, w;      // w:看向方向，u：镜头平面的 x，v：镜头屏幕的 y
+  double lens_radius; // 镜头半径
 
 public:
   camera() = default;
-  camera(
-      const point3& lookfrom, const point3& lookat, const Vec3d& vup, double vfov, double aspect_ratio, double aperture, double focus_dist) {
+  camera(const point3 &lookfrom, const point3 &lookat, const Vec3d &vup, double vfov, double aspect_ratio,
+      double aperture, double focus_dist) {
     auto theta = degrees_to_radians(vfov);
     auto h = tan(theta / 2);
     auto viewport_height = 2.0 * h;
