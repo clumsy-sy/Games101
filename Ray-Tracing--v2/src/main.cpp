@@ -24,9 +24,16 @@ auto main(int argc, const char **argv) -> int {
     aperture = 0.1;
     break;
 
-  default:
   case 2:
     world = two_spheres();
+    lookfrom = point3(13, 2, 3);
+    lookat = point3(0, 0, 0);
+    vfov = 20.0;
+    break;
+
+  default:
+  case 3:
+    world = two_perlin_spheres();
     lookfrom = point3(13, 2, 3);
     lookat = point3(0, 0, 0);
     vfov = 20.0;

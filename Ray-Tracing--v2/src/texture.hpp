@@ -5,6 +5,7 @@
 
 #include "global.hpp"
 #include "Vec3dx4.hpp"
+#include "perlin.hpp"
 
 class texture {
 public:
@@ -46,6 +47,18 @@ public:
     else
       return even->value(u, v, p);
   }
+};
+
+class noise_texture : public texture {
+public:
+  noise_texture() = default;
+
+  [[nodiscard]] auto value(double u, double v, const point3 &p) const -> color override {
+    return color(1, 1, 1) * noise.noise(p);
+  }
+
+public:
+  perlin noise;
 };
 
 #endif
