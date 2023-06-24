@@ -54,4 +54,9 @@ just move # 讲生成的图片移到 images 文件夹
 
 ![Alt](images/7.bmp)
 
+在格点上使用随机向量
+
+![Alt](images/8.bmp)
+
+
 
