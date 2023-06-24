@@ -5,12 +5,15 @@
 
 #include "material.hpp"
 #include "hittable.hpp"
+#include "texture.hpp"
+
 class lambertian : public material {
 public:
-  color albedo; // 以某种概率分布衰减，albedo / p
+  std::shared_ptr<texture> albedo; // 以某种概率分布衰减，albedo / p
 
 public:
-  lambertian(color a) : albedo(std::move(a)) {}
+  lambertian(const color &a) : albedo(std::make_shared<solid_color>(a)) {}
+  lambertian(std::shared_ptr<texture> a) : albedo(std::move(a)) {}
 
   auto scatter(const ray &r_in, const hit_record &rec, color &attenuation, ray &scattered) const -> bool override {
     // 得到一个在交点的单位相切圆上的随机散射方向向量
@@ -21,7 +24,7 @@ public:
       scatter_direction = rec.normal;
 
     scattered = ray(rec.p, scatter_direction, r_in.time());
-    attenuation = albedo;
+    attenuation = albedo->value(rec.u, rec.v, rec.p);
     return true;
   }
 };

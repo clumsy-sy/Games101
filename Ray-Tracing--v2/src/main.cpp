@@ -10,7 +10,7 @@ auto main(int argc, const char **argv) -> int {
   // World
   auto world = random_scene();
   auto aspect_ratio = 16.0 / 9.0;
-  int image_width = 400;
+  int image_width = 1200;
 
   // Camera
   point3 lookfrom(13, 2, 3);
@@ -27,7 +27,7 @@ auto main(int argc, const char **argv) -> int {
   Renderer Render(world, aspect_ratio, image_width);
   Render.set_camera(cam);
   Render.set_photo_name(photoname);
-  Render.set_samples_per_pixel(100);
+  Render.set_samples_per_pixel(400);
   Render.render();
 
   return 0;

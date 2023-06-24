@@ -18,6 +18,14 @@ inline auto degrees_to_radians(double degrees) -> double {
   return degrees * pi / 180.0;
 }
 
+inline auto random_int(int min, int max) -> auto{
+  return [min, max]() -> int {
+    thread_local std::uniform_int_distribution<> distribution(min, max);
+    thread_local std::mt19937 generator{std::random_device{}()};
+    return distribution(generator);
+  };
+}
+
 inline auto random_double() -> double {
   thread_local std::uniform_real_distribution<double> distribution(0.0, 1.0);
   thread_local std::mt19937 generator{std::random_device{}()};

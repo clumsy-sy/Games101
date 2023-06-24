@@ -30,3 +30,9 @@ just move # 讲生成的图片移到 images 文件夹
 
 ![Alt](images/1.bmp)
 
+### AABB
+
+就是最小包围几何物体的盒子
+
+![Alt](images/2.bmp)
+
