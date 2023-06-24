@@ -51,14 +51,16 @@ public:
 
 class noise_texture : public texture {
 public:
-  noise_texture() = default;
-
-  [[nodiscard]] auto value(double u, double v, const point3 &p) const -> color override {
-    return color(1, 1, 1) * noise.noise(p);
-  }
+  perlin noise;
+  double scale;
 
 public:
-  perlin noise;
+  noise_texture() = default;
+  noise_texture(double sc) : scale(sc) {}
+
+  [[nodiscard]] auto value(double u, double v, const point3 &p) const -> color override {
+    return color(1, 1, 1) * noise.noise(scale * p);
+  }
 };
 
 #endif

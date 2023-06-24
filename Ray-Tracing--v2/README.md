@@ -46,3 +46,12 @@ just move # 讲生成的图片移到 images 文件夹
 
 ![Alt](images/5.bmp)
 
+埃尔米特平滑的改进
+
+![Alt](images/6.bmp)
+
+增加频率
+
+![Alt](images/7.bmp)
+
+
