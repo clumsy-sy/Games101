@@ -36,3 +36,4 @@ just move # 讲生成的图片移到 images 文件夹
 
 ![Alt](images/2.bmp)
 
+![Alt](images/3.bmp)
