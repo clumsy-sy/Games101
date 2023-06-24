@@ -58,5 +58,13 @@ just move # 讲生成的图片移到 images 文件夹
 
 ![Alt](images/8.bmp)
 
+加上湍流效果(turbulence)
+
+![Alt](images/9.bmp)
+
+呈现波浪型的大理石条纹
+
+![Alt](images/10.bmp)
+
 
 
