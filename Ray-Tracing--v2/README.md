@@ -42,3 +42,7 @@ just move # 讲生成的图片移到 images 文件夹
 
 ![Alt](images/4.bmp)
 
+插值平滑后
+
+![Alt](images/5.bmp)
+
