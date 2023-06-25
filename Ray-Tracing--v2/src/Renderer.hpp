@@ -23,6 +23,7 @@ public:
   uint32_t samples_per_pixel = 64; // 单素采样数
   uint32_t max_depth = 50;         // 光线递归深度
   uint32_t async_num = 36;         // 线程数
+  color background = color(0.0, 0.0, 0.0);
 
 public:
   Renderer() = default;
@@ -46,6 +47,9 @@ public:
   auto set_async_num(uint32_t num) {
     async_num = num;
   }
+  auto set_background(color &col) {
+    background = col;
+  }
   auto render() {
     bmp::bitmap photo(image_width, image_height); // photo
     std::vector<std::future<void>> deque;         // thread deque
@@ -60,7 +64,8 @@ public:
             auto u = (i + random_double()) / (image_width - 1);
             auto v = (j + random_double()) / (image_height - 1);
             ray r = cam.get_ray(u, v);
-            pixel_color += ray_color(r, world, max_depth);
+            // pixel_color += ray_color(r, world, max_depth);
+            pixel_color += ray_color(r, background, world, max_depth);
           }
           photo.set(i, j, pixel_color, samples_per_pixel);
         }

@@ -22,7 +22,7 @@ public:
   solid_color(color c) : color_value(std::move(c)) {}
   solid_color(double red, double green, double blue) : solid_color(color(red, green, blue)) {}
 
-  [[nodiscard]] auto value(double u, double v, const Vec3d &p) const -> color override {
+  [[nodiscard]] auto value(double, double, const Vec3d &) const -> color override {
     return color_value;
   }
 };
@@ -41,7 +41,7 @@ public:
   checker_texture(color c1, color c2)
       : odd(std::make_shared<solid_color>(c2)), even(std::make_shared<solid_color>(c1)) {}
 
-  auto value(double u, double v, const point3 &p) const -> color override {
+  [[nodiscard]] auto value(double u, double v, const point3 &p) const -> color override {
     auto sines = sin(10 * p.x()) * sin(10 * p.y()) * sin(10 * p.z());
     if (sines < 0)
       return odd->value(u, v, p);
@@ -59,7 +59,7 @@ public:
   noise_texture() = default;
   noise_texture(double sc) : scale(sc) {}
 
-  [[nodiscard]] auto value(double u, double v, const point3 &p) const -> color override {
+  [[nodiscard]] auto value(double, double, const point3 &p) const -> color override {
     // return color(1, 1, 1) * 0.5 * (1.0 + noise.noise(scale * p));
     // return color(1, 1, 1) * noise.turb(scale * p);
     return color(1, 1, 1) * 0.5 * (1 + sin(scale * p.z() + 10 * noise.turb(p)));
@@ -80,7 +80,7 @@ public:
   image_texture(const char *filename) {
     auto components_per_pixel = bytes_per_pixel;
 
-    data = stbi_load(filename, &width, &height, &components_per_pixel, components_per_pixel);
+    // data = stbi_load(filename, &width, &height, &components_per_pixel, components_per_pixel);
     std::cout << "width : " << width << " height: " << height << std::endl;
     if (!data) {
       std::cerr << "ERROR: Could not load texture image file '" << filename << "'.\n";
@@ -94,7 +94,7 @@ public:
     delete data;
   }
 
-  [[nodiscard]] auto value(double u, double v, const Vec3d &p) const -> color override {
+  [[nodiscard]] auto value(double u, double v, const Vec3d &) const -> color override {
     // If we have no texture data, then return solid cyan as a debugging aid.
     if (data == nullptr)
       return {0, 1, 1};

@@ -70,5 +70,9 @@ just move # 讲生成的图片移到 images 文件夹
 
 ![Alt](images/11.bmp)
 
+### 光源
 
+前面的所有图片的光源都来自背景，现在需要去掉背景光，而让部分物体发光
+
+![Alt](images/12.bmp)
 

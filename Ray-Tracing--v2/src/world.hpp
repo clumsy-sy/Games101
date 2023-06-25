@@ -7,6 +7,7 @@
 #include "metal.hpp"
 #include "sphere.hpp"
 #include "moving_sphere.hpp"
+#include "xy_rect.hpp"
 
 auto random_scene() -> hittable_list {
   hittable_list world;
@@ -85,6 +86,20 @@ auto earth() -> hittable_list {
   auto globe = make_shared<sphere>(point3(0, 0, 0), 2, earth_surface);
 
   return hittable_list(globe);
+}
+
+auto simple_light() -> hittable_list {
+  hittable_list objects;
+
+  auto pertext = make_shared<noise_texture>(4);
+  objects.add(make_shared<sphere>(point3(0, -1000, 0), 1000, make_shared<lambertian>(pertext)));
+  objects.add(make_shared<sphere>(point3(0, 2, 0), 2, make_shared<lambertian>(pertext)));
+
+  auto difflight = make_shared<diffuse_light>(color(4, 4, 4));
+  objects.add(make_shared<xy_rect>(3, 5, 1, 3, -2, difflight));
+  objects.add(make_shared<sphere>(point3(0, 6, 0), 1.2, difflight));
+
+  return objects;
 }
 
 #endif
