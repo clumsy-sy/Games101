@@ -79,4 +79,12 @@ auto two_perlin_spheres() -> hittable_list {
   return objects;
 }
 
+auto earth() -> hittable_list {
+  auto earth_texture = make_shared<image_texture>("build/earthmap.jpg");
+  auto earth_surface = make_shared<lambertian>(earth_texture);
+  auto globe = make_shared<sphere>(point3(0, 0, 0), 2, earth_surface);
+
+  return hittable_list(globe);
+}
+
 #endif

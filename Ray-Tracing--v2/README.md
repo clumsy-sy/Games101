@@ -66,5 +66,9 @@ just move # 讲生成的图片移到 images 文件夹
 
 ![Alt](images/10.bmp)
 
+### 纹理贴图
+
+![Alt](images/11.bmp)
+
 
 
