@@ -49,7 +49,7 @@ auto main(int argc, const char **argv) -> int {
     lookat = point3(0, 0, 0);
     vfov = 20.0;
     break;
-  default:
+
   case 5:
     world = simple_light();
     samples_per_pixel = 400;
@@ -57,6 +57,17 @@ auto main(int argc, const char **argv) -> int {
     lookfrom = point3(26, 3, 6);
     lookat = point3(0, 2, 0);
     vfov = 20.0;
+    break;
+  default:
+  case 6:
+    world = cornell_box();
+    aspect_ratio = 1.0;
+    image_width = 600;
+    samples_per_pixel = 200;
+    background = color(0, 0, 0);
+    lookfrom = point3(278, 278, -800);
+    lookat = point3(278, 278, 0);
+    vfov = 40.0;
     break;
   }
 

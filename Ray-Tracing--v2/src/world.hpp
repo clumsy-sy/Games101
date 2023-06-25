@@ -1,13 +1,13 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
+#include "aarect.hpp"
 #include "dielectric.hpp"
 #include "hittablelist.hpp"
 #include "lambertian.hpp"
 #include "metal.hpp"
 #include "sphere.hpp"
 #include "moving_sphere.hpp"
-#include "xy_rect.hpp"
 
 auto random_scene() -> hittable_list {
   hittable_list world;
@@ -98,6 +98,24 @@ auto simple_light() -> hittable_list {
   auto difflight = make_shared<diffuse_light>(color(4, 4, 4));
   objects.add(make_shared<xy_rect>(3, 5, 1, 3, -2, difflight));
   objects.add(make_shared<sphere>(point3(0, 6, 0), 1.2, difflight));
+
+  return objects;
+}
+
+auto cornell_box() -> hittable_list {
+  hittable_list objects;
+
+  auto red = make_shared<lambertian>(color(.65, .05, .05));
+  auto white = make_shared<lambertian>(color(.73, .73, .73));
+  auto green = make_shared<lambertian>(color(.12, .45, .15));
+  auto light = make_shared<diffuse_light>(color(15, 15, 15));
+
+  objects.add(make_shared<yz_rect>(0, 555, 0, 555, 555, green));
+  objects.add(make_shared<yz_rect>(0, 555, 0, 555, 0, red));
+  objects.add(make_shared<xz_rect>(213, 343, 227, 332, 554, light));
+  objects.add(make_shared<xz_rect>(0, 555, 0, 555, 0, white));
+  objects.add(make_shared<xz_rect>(0, 555, 0, 555, 555, white));
+  objects.add(make_shared<xy_rect>(0, 555, 0, 555, 555, white));
 
   return objects;
 }
