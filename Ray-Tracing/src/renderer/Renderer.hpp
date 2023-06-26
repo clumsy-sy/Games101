@@ -56,7 +56,8 @@ public:
     std::mutex cout_mutex;                        // lock the cnt and std::cout
     std::int32_t cnt = 0;
     // 开始
-    UpdateProgress(++cnt, image_height - 1);
+    UpdateProgress(cnt, image_height - 1);
+    
     auto action = [&](uint32_t jl, uint32_t jr) -> void {
       for (uint32_t j = jl; j < jr; ++j) {
         for (uint32_t i = 0; i < image_width; ++i) {
@@ -100,6 +101,7 @@ public:
     return res;
   }
 };
+
 
 auto ray_color(const ray &r, const hittable &world, int depth) -> color {
   if (depth <= 0)
