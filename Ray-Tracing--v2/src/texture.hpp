@@ -80,8 +80,8 @@ public:
   image_texture(const char *filename) {
     auto components_per_pixel = bytes_per_pixel;
 
-    // data = stbi_load(filename, &width, &height, &components_per_pixel, components_per_pixel);
-    std::cout << "width : " << width << " height: " << height << std::endl;
+    data = stbi_load(filename, &width, &height, &components_per_pixel, components_per_pixel);
+    // std::cout << "width : " << width << " height: " << height << std::endl;
     if (!data) {
       std::cerr << "ERROR: Could not load texture image file '" << filename << "'.\n";
       width = height = 0;

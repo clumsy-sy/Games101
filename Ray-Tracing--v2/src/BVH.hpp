@@ -76,7 +76,7 @@ auto bvh_node::hit(const ray &r, double t_min, double t_max, hit_record &rec) co
   return hit_left || hit_right;
 }
 
-auto bvh_node::bounding_box(double time0, double time1, aabb &output_box) const -> bool {
+auto bvh_node::bounding_box(double, double, aabb &output_box) const -> bool {
   output_box = box;
   return true;
 }

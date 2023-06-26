@@ -28,6 +28,12 @@ public:
     else
       return 0;
   }
+  auto operator[](int i) -> double & {
+    if (i < 3)
+      return e[i];
+    else
+      return e[0];
+  }
   [[nodiscard]] auto x() const -> double {
     return e[0];
   }

@@ -84,6 +84,15 @@ just move # 讲生成的图片移到 images 文件夹
 
 ![Alt](images/14.bmp)
 
+偏移一下盒子
+
+![Alt](images/15.bmp)
+
+雾化盒子
+
+![Alt](images/16.bmp)
 
 
+### 终极目标
 
+![Alt](images/final.bmp)
