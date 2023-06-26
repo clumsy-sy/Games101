@@ -80,5 +80,10 @@ just move # 讲生成的图片移到 images 文件夹
 
 ![Alt](images/13.bmp)
 
+再加两个盒子
+
+![Alt](images/14.bmp)
+
+
 
 
