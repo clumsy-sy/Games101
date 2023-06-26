@@ -2,6 +2,7 @@
 #define HITTABLE_HPP
 
 #include "../vector/Vec3dx4.hpp"
+#include "AABB.hpp"
 #include "ray.hpp"
 
 class material;
@@ -24,6 +25,7 @@ struct hit_record {
 class hittable {
 public:
   virtual auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool = 0;
+  virtual auto bounding_box(double time0, double time1, aabb &output_box) const -> bool = 0;
 };
 
 #endif

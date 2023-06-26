@@ -14,10 +14,11 @@ public:
 
 public:
   sphere() = default;
-  sphere(const point3 &c, double r, std::shared_ptr<material> m)
-      : center(c), radius(r), radius2(r * r), mat_ptr(std::move(m)){};
+  sphere(point3 c, double r, std::shared_ptr<material> m)
+      : center(std::move(c)), radius(r), radius2(r * r), mat_ptr(std::move(m)){};
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
+  auto bounding_box(double, double, aabb &output_box) const -> bool override;
 };
 
 auto sphere::hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool {
@@ -45,5 +46,12 @@ auto sphere::hit(const ray &r, double t_min, double t_max, hit_record &rec) cons
 
   return true;
 }
+
+auto sphere::bounding_box(double, double, aabb &output_box) const -> bool {
+  // 圆的 AABB 就是(圆心 - r)三个方向 和 （圆心 + r）三个方向
+  output_box = aabb(center - Vec3d(radius, radius, radius), center + Vec3d(radius, radius, radius));
+  return true;
+}
+
 
 #endif
