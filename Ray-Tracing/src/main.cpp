@@ -28,7 +28,7 @@ auto main(int argc, const char **argv) -> int {
   Renderer Render(world, aspect_ratio, image_width);
   Render.set_camera(cam);
   Render.set_photo_name(photoname);
-  Render.set_samples_per_pixel(256);
+  Render.set_samples_per_pixel(64);
   Render.render();
 
   return 0;

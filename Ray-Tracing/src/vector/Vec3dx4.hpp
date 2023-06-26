@@ -89,7 +89,7 @@ public:
   [[nodiscard]] auto near_zero() const -> bool {
     // 是否为 0 向量
     return (std::fabs(x()) < esp) && (std::fabs(y()) < esp) && (std::fabs(z()) < esp);
-    // return length_squared() < esp * esp;
+    // return length_squared() < esp3;
   }
 };
 
