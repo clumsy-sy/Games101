@@ -13,7 +13,7 @@ auto random_scene() -> hittable_list {
   hittable_list world;
 
   auto ground_material = std::make_shared<lambertian>(color(0.5, 0.5, 0.5));
-  world.add(std::make_shared<sphere>(point3(0, -1000, 0), 1000, ground_material));
+  world.add(std::make_shared<sphere>(point3(0, -2000, 0), 2000, ground_material));
   hittable_list box;
   for (int a = -11; a < 11; a++) {
     for (int b = -11; b < 11; b++) {

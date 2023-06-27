@@ -16,7 +16,7 @@ public:
   aabb() = default;
   aabb(point3 a, point3 b) : minimum(std::move(a)), maximum(std::move(b)) {}
   aabb(const aabb &other) = default;
-  auto operator=(const aabb& other) -> aabb& = default;
+  auto operator=(const aabb &other) -> aabb & = default;
   auto min() -> point3 const {
     return minimum;
   };

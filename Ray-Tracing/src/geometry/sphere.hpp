@@ -53,5 +53,4 @@ auto sphere::bounding_box(double, double, aabb &output_box) const -> bool {
   return true;
 }
 
-
 #endif

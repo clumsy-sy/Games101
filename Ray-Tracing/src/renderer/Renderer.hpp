@@ -1,6 +1,7 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
+#include <cmath>
 #include <cstdint>
 #include <functional>
 #include <vector>
@@ -57,17 +58,12 @@ public:
     std::int32_t cnt = 0;
     // 开始
     UpdateProgress(cnt, image_height - 1);
-
+    // 各像素渲染
     auto action = [&](uint32_t jl, uint32_t jr) -> void {
       for (uint32_t j = jl; j < jr; ++j) {
         for (uint32_t i = 0; i < image_width; ++i) {
-          color pixel_color(0, 0, 0);
-          for (uint32_t s = 0; s < samples_per_pixel; ++s) {
-            auto u = (i + random_double()) / (image_width - 1);
-            auto v = (j + random_double()) / (image_height - 1);
-            ray r = cam.get_ray(u, v);
-            pixel_color += ray_color(r, world, max_depth);
-          }
+          // color pixel_color = simple_random_sampling(i, j);
+          color pixel_color = sqrt_random_sampling(i, j);
           photo.set(i, j, pixel_color, samples_per_pixel);
         }
         cout_mutex.lock();
@@ -75,28 +71,41 @@ public:
         cout_mutex.unlock();
       }
     };
-
+    // 分块给各个线程任务
     uint32_t block = image_height / async_num;
     for (uint32_t ti = 0; ti != async_num; ++ti) {
       uint32_t jl = ti * block, jr = (ti + 1) * block;
-      if (ti + 1 == async_num)
+      if (ti + 1 == async_num) // 最后的任务，防止 image_height 不能被整除
         jr = image_height;
       deque.emplace_back(std::async(std::launch::async, action, jl, jr));
     }
-
+    // 等待各个线程都完成
     for (auto &i : deque) {
       i.wait();
     }
 
     photo.generate(photoname);
   }
-  auto simple_random_sampling(uint32_t i, uint32_t j, uint32_t times) -> color {
+  inline auto simple_random_sampling(uint32_t i, uint32_t j) -> color {
     color res(0, 0, 0);
-    for (uint32_t s = 0; s < times; ++s) {
+    for (uint32_t s = 0; s < samples_per_pixel; ++s) {
       auto u = (i + random_double()) / (image_width - 1);
       auto v = (j + random_double()) / (image_height - 1);
       ray r = cam.get_ray(u, v);
       res += ray_color(r, world, max_depth);
+    }
+    return res;
+  }
+  inline auto sqrt_random_sampling(uint32_t i, uint32_t j) -> color {
+    thread_local uint32_t N = std::sqrt(samples_per_pixel);
+    color res(0, 0, 0);
+    for(uint32_t di = 0; di < N; ++di){
+      for(uint32_t dj = 0; dj < N; ++dj) {
+        auto u = (i + (di + random_double()) / N) / (image_width - 1);
+        auto v = (j + (dj + random_double()) / N) / (image_height - 1);
+        ray r = cam.get_ray(u, v);
+        res += ray_color(r, world, max_depth);
+      }
     }
     return res;
   }
@@ -106,7 +115,7 @@ auto ray_color(const ray &r, const hittable &world, int depth) -> color {
   if (depth <= 0)
     return {0, 0, 0};
   hit_record rec;
-  if (world.hit(r, 0.0001, infinity, rec)) {
+  if (world.hit(r, 0.001, infinity, rec)) {
     ray scattered;
     color attenuation;
     if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
