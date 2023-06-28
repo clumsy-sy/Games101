@@ -14,6 +14,7 @@ struct hit_record {
   Vec3d normal;                      // 法线
   std::shared_ptr<material> mat_ptr; // 材质
   double t;                          // 光线的 t
+  double u, v;                       // 材质
   bool front_face;                   // 朝向
 
   inline void set_face_normal(const ray &r, const Vec3d &outward_normal) {

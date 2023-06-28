@@ -63,7 +63,7 @@ public:
     auto scale = 1.0 / samples_per_pixel;
     pixel_color *= scale;
     // gamma Correction to accurate color intensity
-    sqrt(pixel_color); // 变亮
+    pixel_color.sqrt(); // 变亮
     // Write the translated [0,255] value of each color component.
     image[y * width + x] = {static_cast<unsigned char>(256 * clamp(pixel_color.z(), 0.0, 0.999)),
         static_cast<unsigned char>(256 * clamp(pixel_color.y(), 0.0, 0.999)),

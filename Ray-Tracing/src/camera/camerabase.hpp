@@ -6,7 +6,7 @@
 
 class camerabase {
 public:
-  point3 origin = {0, 0, 0};
+  point3 origin = point3(0, 0, 0);
   point3 lower_left_corner;
   Vec3d horizontal, vertical;
 

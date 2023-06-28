@@ -10,6 +10,9 @@ struct hit_record;
 class material {
 public:
   virtual auto scatter(const ray &r_in, const hit_record &rec, color &attenuation, ray &scattered) const -> bool = 0;
+  [[nodiscard]] virtual auto emitted(double, double, const point3 &) const -> color {
+    return {0, 0, 0};
+  }
 };
 
 #endif

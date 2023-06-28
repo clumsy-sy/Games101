@@ -1,5 +1,5 @@
 #ifndef BVH_HPP
-#define BNH_HPP
+#define BVH_HPP
 
 #include "../global.hpp"
 #include "hittablelist.hpp"

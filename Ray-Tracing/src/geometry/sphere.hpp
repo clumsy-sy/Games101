@@ -12,6 +12,21 @@ public:
   double radius, radius2;
   std::shared_ptr<material> mat_ptr;
 
+private:
+  static void get_sphere_uv(const point3 &p, double &u, double &v) {
+    /*
+      纹理坐标 $(u, v) \in [0, 1]$ 需要被映射到球面上，使用极坐标就是 $(\theta, \phi)$
+      u = \phi / 2 * PI , v = \theta / PI
+      由于圆是 (x, y, z) 形式存储，所以需要从笛卡尔坐标系转为极坐标系
+      https://raytracing.github.io/books/RayTracingTheNextWeek.html#solidtextures/texturecoordinatesforspheres
+    */
+    auto theta = acos(-p.y());
+    auto phi = atan2(-p.z(), p.x()) + PI;
+
+    u = phi / (2 * PI);
+    v = theta / PI;
+  }
+
 public:
   sphere() = default;
   sphere(point3 c, double r, std::shared_ptr<material> m)
@@ -40,8 +55,9 @@ auto sphere::hit(const ray &r, double t_min, double t_max, hit_record &rec) cons
 
   rec.t = root;
   rec.p = r.at(rec.t);
-  Vec3d outward_normal = (rec.p - center) / radius;
+  Vec3d &&outward_normal = (rec.p - center) / radius;
   rec.set_face_normal(r, outward_normal);
+  get_sphere_uv(outward_normal, rec.u, rec.v);
   rec.mat_ptr = mat_ptr;
 
   return true;

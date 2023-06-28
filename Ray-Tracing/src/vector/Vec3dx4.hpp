@@ -14,10 +14,17 @@ public:
   f64x4 e;
 
 public:
-  Vec3d() : e{} {}
-  Vec3d(double xx) : e{xx, xx, xx, 0} {}
-  Vec3d(double xx, double yy, double zz) : e{xx, yy, zz, 0} {}
-  Vec3d(const f64x4 &other) : e{other} {}
+  Vec3d() : e() {}
+  Vec3d(const Vec3d &) = default;
+  Vec3d(Vec3d &&) = default;
+  auto operator=(const Vec3d &v) -> Vec3d & {
+    e.r = v.e.r;
+    return *this;
+  };
+  auto operator=(Vec3d &&) -> Vec3d & = default;
+  Vec3d(double xx) : e(xx, xx, xx, 0) {}
+  Vec3d(double xx, double yy, double zz) : e(xx, yy, zz, 0) {}
+  Vec3d(const f64x4 &other) : e(other.r) {}
 
   auto operator-() const -> Vec3d {
     return -e;
@@ -91,11 +98,16 @@ public:
     return (std::fabs(x()) < esp) && (std::fabs(y()) < esp) && (std::fabs(z()) < esp);
     // return length_squared() < esp3;
   }
+  auto sqrt() -> Vec3d & {
+    auto res = std::sqrt(e);
+    this->e = res.r;
+    return *this;
+  }
 };
 
-inline auto sqrt(Vec3d &v) -> void {
-  v = std::sqrt(v.e);
-}
+// inline auto sqrt(Vec3d &v) -> void {
+//   v = Vec3d(std::sqrt(v.e));
+// }
 
 inline auto dot(const Vec3d &a, const Vec3d &b) -> double {
   return (a * b).sum3();

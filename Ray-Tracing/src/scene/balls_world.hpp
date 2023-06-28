@@ -1,5 +1,5 @@
-#ifndef WORLD_HPP
-#define WORLD_HPP
+#ifndef BALLS_WORLD_HPP
+#define BALLS_WORLD_HPP
 
 #include "../material/dielectric.hpp"
 #include "../material/lambertian.hpp"
@@ -9,7 +9,7 @@
 #include "../geometry/BVH.hpp"
 #include <memory>
 
-auto random_scene() -> hittable_list {
+auto random_balls_world() -> hittable_list {
   hittable_list world;
 
   auto ground_material = std::make_shared<lambertian>(color(0.5, 0.5, 0.5));
