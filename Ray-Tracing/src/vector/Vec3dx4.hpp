@@ -21,7 +21,10 @@ public:
     e.r = v.e.r;
     return *this;
   };
-  auto operator=(Vec3d &&) -> Vec3d & = default;
+  auto operator=(Vec3d &&v) noexcept -> Vec3d & {
+    e.r = v.e.r;
+    return *this;
+  };
   Vec3d(double xx) : e(xx, xx, xx, 0) {}
   Vec3d(double xx, double yy, double zz) : e(xx, yy, zz, 0) {}
   Vec3d(const f64x4 &other) : e(other.r) {}
