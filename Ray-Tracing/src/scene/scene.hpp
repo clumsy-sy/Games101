@@ -54,7 +54,6 @@ inline auto choose_scene(uint32_t opt, double &aspect_ratio, int &image_width, d
     vfov = 40.0;
     return cornell_smoke();
   case 8:
-
     aspect_ratio = 1.0;
     image_width = 800;
     background = color(0, 0, 0);

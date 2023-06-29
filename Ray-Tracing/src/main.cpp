@@ -59,7 +59,7 @@ auto main(int argc, const char **argv) -> int {
   Renderer<camera> renderer(world, aspect_ratio, image_width);
   renderer.set_camera(cam);
   renderer.set_photo_name(photoname);
-  renderer.set_samples_per_pixel(1000);
+  renderer.set_samples_per_pixel(400);
   renderer.set_background(background);
   renderer.render();
 

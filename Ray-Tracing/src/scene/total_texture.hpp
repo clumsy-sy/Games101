@@ -62,11 +62,10 @@ auto total_texture() -> hittable_list {
     objects.add(std::make_shared<sphere>(point3(400,200,400), 100, emat));
     auto pertext = std::make_shared<noise_texture>(0.1);
     objects.add(std::make_shared<sphere>(point3(220,280,300), 80, std::make_shared<lambertian>(pertext)));
-
     hittable_list boxes2;
     auto white = std::make_shared<lambertian>(color(.73, .73, .73));
-    // int ns = 1000;
-    int ns = 200;
+    int ns = 1000;
+    // int ns = 200;
     for (int j = 0; j < ns; j++) {
         boxes2.add(std::make_shared<sphere>(point3::random(0,165), 10, white));
     }

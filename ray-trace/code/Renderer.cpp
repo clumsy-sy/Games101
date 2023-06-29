@@ -39,7 +39,7 @@ auto refract(const Vector3f &I, const Vector3f &N, const float &ior)
   }
   float eta = etai / etat;
   float k = 1 - eta * eta * (1 - cosi * cosi);
-  return k < 0 ? 0 : eta * I + (eta * cosi - sqrtf(k)) * n;
+  return k < 0 ? 0 : eta * I + (eta * cosi - std::sqrt(k)) * n;
 }
 
 // [comment]
@@ -235,8 +235,7 @@ void Renderer::Render(const Scene &scene) {
   for (int j = 0; j < scene.height; ++j) {
     for (int i = 0; i < scene.width; ++i) {
       // generate primary ray direction
-      float x;
-      float y;
+      float x, y;
       // TODO: Find the x and y positions of the current pixel to get the
       // direction vector that passes through it. Also, don't forget to multiply
       // both of them with the variable *scale*, and x (horizontal) variable
