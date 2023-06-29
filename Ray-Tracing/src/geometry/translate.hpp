@@ -12,7 +12,7 @@ public:
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
 
-  auto bounding_box(double time0, double time1, aabb &output_box) const -> bool override;
+  auto bounding_box(aabb &output_box) const -> bool override;
 };
 
 auto translate::hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool {
@@ -26,8 +26,8 @@ auto translate::hit(const ray &r, double t_min, double t_max, hit_record &rec) c
   return true;
 }
 
-auto translate::bounding_box(double time0, double time1, aabb &output_box) const -> bool {
-  if (!ptr->bounding_box(time0, time1, output_box))
+auto translate::bounding_box(aabb &output_box) const -> bool {
+  if (!ptr->bounding_box(output_box))
     return false;
 
   output_box = aabb(output_box.min() + offset, output_box.max() + offset);
@@ -48,7 +48,7 @@ public:
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
 
-  auto bounding_box(double, double, aabb &output_box) const -> bool override {
+  auto bounding_box(aabb &output_box) const -> bool override {
     output_box = bbox;
     return hasbox;
   }
@@ -58,7 +58,7 @@ rotate_y::rotate_y(std::shared_ptr<hittable> p, double angle) : ptr(std::move(p)
   auto radians = degrees_to_radians(angle);
   sin_theta = sin(radians);
   cos_theta = cos(radians);
-  hasbox = ptr->bounding_box(0, 1, bbox);
+  hasbox = ptr->bounding_box(bbox);
 
   point3 min(infinity, infinity, infinity);
   point3 max(-infinity, -infinity, -infinity);

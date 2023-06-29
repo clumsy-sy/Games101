@@ -18,7 +18,7 @@ public:
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
 
-  auto bounding_box(double, double, aabb &output_box) const -> bool override {
+  auto bounding_box(aabb &output_box) const -> bool override {
     // The bounding box must have non-zero width in each dimension, so pad the Z
     // dimension a small amount.
     output_box = aabb(point3(x0, y0, k - 0.0001), point3(x1, y1, k + 0.0001));
@@ -57,7 +57,7 @@ public:
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
 
-  auto bounding_box(double, double, aabb &output_box) const -> bool override {
+  auto bounding_box(aabb &output_box) const -> bool override {
     // The bounding box must have non-zero width in each dimension, so pad the Y
     // dimension a small amount.
     output_box = aabb(point3(x0, k - 0.0001, z0), point3(x1, k + 0.0001, z1));
@@ -96,7 +96,7 @@ public:
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
 
-  auto bounding_box(double, double, aabb &output_box) const -> bool override {
+  auto bounding_box(aabb &output_box) const -> bool override {
     // The bounding box must have non-zero width in each dimension, so pad the X
     // dimension a small amount.
     output_box = aabb(point3(k - 0.0001, y0, z0), point3(k + 0.0001, y1, z1));

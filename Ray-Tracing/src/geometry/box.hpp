@@ -16,7 +16,7 @@ public:
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
 
-  auto bounding_box(double, double, aabb &output_box) const -> bool override {
+  auto bounding_box(aabb &output_box) const -> bool override {
     output_box = aabb(box_min, box_max);
     return true;
   }

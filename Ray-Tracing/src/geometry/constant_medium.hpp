@@ -24,8 +24,8 @@ public:
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
 
-  auto bounding_box(double time0, double time1, aabb &output_box) const -> bool override {
-    return boundary->bounding_box(time0, time1, output_box);
+  auto bounding_box(aabb &output_box) const -> bool override {
+    return boundary->bounding_box(output_box);
   }
 };
 

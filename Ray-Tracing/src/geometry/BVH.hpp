@@ -30,7 +30,7 @@ public:
       const std::vector<std::shared_ptr<hittable>> &src_objects, size_t start, size_t end, double time0, double time1);
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
-  auto bounding_box(double time0, double time1, aabb &output_box) const -> bool override;
+  auto bounding_box(aabb &output_box) const -> bool override;
 };
 bvh_node::bvh_node(
     const std::vector<std::shared_ptr<hittable>> &src_objects, size_t start, size_t end, double time0, double time1) {
@@ -61,7 +61,7 @@ bvh_node::bvh_node(
 
   aabb box_left, box_right;
 
-  if (!left->bounding_box(time0, time1, box_left) || !right->bounding_box(time0, time1, box_right))
+  if (!left->bounding_box(box_left) || !right->bounding_box(box_right))
     std::cerr << "No bounding box in bvh_node constructor.\n";
 
   box = surrounding_box(box_left, box_right);
@@ -77,7 +77,7 @@ auto bvh_node::hit(const ray &r, double t_min, double t_max, hit_record &rec) co
   return hit_left || hit_right;
 }
 
-auto bvh_node::bounding_box(double, double, aabb &output_box) const -> bool {
+auto bvh_node::bounding_box(aabb &output_box) const -> bool {
   output_box = box;
   return true;
 }
@@ -86,7 +86,7 @@ auto bvh_node::bounding_box(double, double, aabb &output_box) const -> bool {
 inline auto box_compare(const std::shared_ptr<hittable> &a, const std::shared_ptr<hittable> &b, int axis) -> bool {
   aabb box_a, box_b;
   // 可优化，用空间换时间
-  if (!a->bounding_box(0, 0, box_a) || !b->bounding_box(0, 0, box_b))
+  if (!a->bounding_box(box_a) || !b->bounding_box(box_b))
     std::cerr << "No bounding box in bvh_node constructor.\n";
 
   return box_a.min().e[axis] < box_b.min().e[axis];

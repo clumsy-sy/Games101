@@ -24,7 +24,7 @@ public:
   }
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
-  auto bounding_box(double time0, double time1, aabb &output_box) const -> bool override;
+  auto bounding_box(aabb &output_box) const -> bool override;
 };
 
 auto hittable_list::hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool {
@@ -43,7 +43,7 @@ auto hittable_list::hit(const ray &r, double t_min, double t_max, hit_record &re
   return hit_anything;
 }
 
-auto hittable_list::bounding_box(double time0, double time1, aabb &output_box) const -> bool {
+auto hittable_list::bounding_box(aabb &output_box) const -> bool {
   // 遍历数组，求整体的 AABB（不断更新）
   if (objects.empty())
     return false;
@@ -52,7 +52,7 @@ auto hittable_list::bounding_box(double time0, double time1, aabb &output_box) c
   bool first_box = true;
 
   for (const auto &object : objects) {
-    if (!object->bounding_box(time0, time1, temp_box))
+    if (!object->bounding_box(temp_box))
       return false;
     output_box = first_box ? temp_box : surrounding_box(output_box, temp_box);
     first_box = false;
