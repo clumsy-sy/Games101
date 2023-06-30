@@ -23,17 +23,14 @@ public:
 public:
   bvh_node();
 
-  bvh_node(const hittable_list &list, double time0, double time1)
-      : bvh_node(list.objects, 0, list.objects.size(), time0, time1) {}
+  bvh_node(const hittable_list &list) : bvh_node(list.objects, 0, list.objects.size()) {}
 
-  bvh_node(
-      const std::vector<std::shared_ptr<hittable>> &src_objects, size_t start, size_t end, double time0, double time1);
+  bvh_node(const std::vector<std::shared_ptr<hittable>> &src_objects, size_t start, size_t end);
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
   auto bounding_box(aabb &output_box) const -> bool override;
 };
-bvh_node::bvh_node(
-    const std::vector<std::shared_ptr<hittable>> &src_objects, size_t start, size_t end, double time0, double time1) {
+bvh_node::bvh_node(const std::vector<std::shared_ptr<hittable>> &src_objects, size_t start, size_t end) {
   auto objects = src_objects; // Create a modifiable array of the source scene objects
   // 随机一个轴，按这个轴排序
   int axis = random_int(0, 2)();
@@ -55,8 +52,8 @@ bvh_node::bvh_node(
     std::sort(objects.begin() + start, objects.begin() + end, comparator);
     // 按随机的轴排序后，递归建树
     auto mid = start + object_span / 2;
-    left = make_shared<bvh_node>(objects, start, mid, time0, time1);
-    right = make_shared<bvh_node>(objects, mid, end, time0, time1);
+    left = make_shared<bvh_node>(objects, start, mid);
+    right = make_shared<bvh_node>(objects, mid, end);
   }
 
   aabb box_left, box_right;

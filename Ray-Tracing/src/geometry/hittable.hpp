@@ -27,6 +27,7 @@ class hittable {
 public:
   virtual auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool = 0;
   virtual auto bounding_box(aabb &output_box) const -> bool = 0;
+  virtual ~hittable() = default;
 };
 
 #endif

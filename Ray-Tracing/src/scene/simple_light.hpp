@@ -27,5 +27,4 @@ auto simple_light() -> hittable_list {
   return objects;
 }
 
-
 #endif

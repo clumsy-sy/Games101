@@ -11,8 +11,8 @@
 
 class constant_medium : public hittable {
 public:
-  std::shared_ptr<hittable> boundary;         // 边界
-  std::shared_ptr<material> phase_function;   // 作用效果
+  std::shared_ptr<hittable> boundary;       // 边界
+  std::shared_ptr<material> phase_function; // 作用效果
   double neg_inv_density;
 
 public:

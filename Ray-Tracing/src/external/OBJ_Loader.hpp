@@ -9,8 +9,6 @@
 #ifndef RASTERIZER_OBJ_LOADER_H
 #define RASTERIZER_OBJ_LOADER_H
 
-#pragma once
-
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -255,12 +253,10 @@ auto GenTriNormal(Vector3 t1, Vector3 t2, Vector3 t3) -> Vector3 {
 }
 
 // Check to see if a Vector3 Point is within a 3 Vector3 Triangle
-auto inTriangle(Vector3 point, Vector3 tri1, Vector3 tri2, Vector3 tri3)
-    -> bool {
+auto inTriangle(Vector3 point, Vector3 tri1, Vector3 tri2, Vector3 tri3) -> bool {
   // Test to see if it is within an infinite prism that the triangle outlines.
-  bool within_tri_prisim = SameSide(point, tri1, tri2, tri3) &&
-                           SameSide(point, tri2, tri1, tri3) &&
-                           SameSide(point, tri3, tri1, tri2);
+  bool within_tri_prisim =
+      SameSide(point, tri1, tri2, tri3) && SameSide(point, tri2, tri1, tri3) && SameSide(point, tri3, tri1, tri2);
 
   // If it isn't it will never be on the triangle
   if (!within_tri_prisim)
@@ -281,8 +277,7 @@ auto inTriangle(Vector3 point, Vector3 tri1, Vector3 tri2, Vector3 tri3)
 }
 
 // Split a String into a string array at a given token
-inline void split(const std::string &in, std::vector<std::string> &out,
-                  const std::string &token) {
+inline void split(const std::string &in, std::vector<std::string> &out, const std::string &token) {
   out.clear();
 
   std::string temp;
@@ -338,8 +333,7 @@ inline auto firstToken(const std::string &in) -> std::string {
 
 // Get element at given index position
 template <class T>
-inline auto getElement(const std::vector<T> &elements, std::string &index)
-    -> const T & {
+inline auto getElement(const std::vector<T> &elements, std::string &index) -> const T & {
   int idx = std::stoi(index);
   if (idx < 0)
     idx = int(elements.size()) + idx;
@@ -356,7 +350,9 @@ class Loader {
 public:
   // Default Constructor
   Loader() = default;
-  ~Loader() { LoadedMeshes.clear(); }
+  ~Loader() {
+    LoadedMeshes.clear();
+  }
 
   // Load a file into the loader
   //
@@ -402,25 +398,19 @@ public:
 #ifdef OBJL_CONSOLE_OUTPUT
       if ((outputIndicator = ((outputIndicator + 1) % outputEveryNth)) == 1) {
         if (!meshname.empty()) {
-          std::cout << "\r- " << meshname << "\t| vertices > "
-                    << Positions.size() << "\t| texcoords > " << TCoords.size()
-                    << "\t| normals > " << Normals.size() << "\t| triangles > "
-                    << (Vertices.size() / 3)
-                    << (!MeshMatNames.empty()
-                            ? "\t| material: " + MeshMatNames.back()
-                            : "");
+          std::cout << "\r- " << meshname << "\t| vertices > " << Positions.size() << "\t| texcoords > "
+                    << TCoords.size() << "\t| normals > " << Normals.size() << "\t| triangles > "
+                    << (Vertices.size() / 3) << (!MeshMatNames.empty() ? "\t| material: " + MeshMatNames.back() : "");
         }
       }
 #endif
 
       // Generate a Mesh Object or Prepare for an object to be created
-      if (algorithm::firstToken(curline) == "o" ||
-          algorithm::firstToken(curline) == "g" || curline[0] == 'g') {
+      if (algorithm::firstToken(curline) == "o" || algorithm::firstToken(curline) == "g" || curline[0] == 'g') {
         if (!listening) {
           listening = true;
 
-          if (algorithm::firstToken(curline) == "o" ||
-              algorithm::firstToken(curline) == "g") {
+          if (algorithm::firstToken(curline) == "o" || algorithm::firstToken(curline) == "g") {
             meshname = algorithm::tail(curline);
           } else {
             meshname = "unnamed";
@@ -443,8 +433,7 @@ public:
 
             meshname = algorithm::tail(curline);
           } else {
-            if (algorithm::firstToken(curline) == "o" ||
-                algorithm::firstToken(curline) == "g") {
+            if (algorithm::firstToken(curline) == "o" || algorithm::firstToken(curline) == "g") {
               meshname = algorithm::tail(curline);
             } else {
               meshname = "unnamed";
@@ -510,12 +499,10 @@ public:
 
         // Add Indices
         for (unsigned int iIndice : iIndices) {
-          unsigned int indnum =
-              (unsigned int)((Vertices.size()) - vVerts.size()) + iIndice;
+          unsigned int indnum = (unsigned int)((Vertices.size()) - vVerts.size()) + iIndice;
           Indices.push_back(indnum);
 
-          indnum =
-              (unsigned int)((LoadedVertices.size()) - vVerts.size()) + iIndice;
+          indnum = (unsigned int)((LoadedVertices.size()) - vVerts.size()) + iIndice;
           LoadedIndices.push_back(indnum);
         }
       }
@@ -569,8 +556,7 @@ public:
         pathtomat += algorithm::tail(curline);
 
 #ifdef OBJL_CONSOLE_OUTPUT
-        std::cout << std::endl
-                  << "- find materials in: " << pathtomat << std::endl;
+        std::cout << std::endl << "- find materials in: " << pathtomat << std::endl;
 #endif
 
         // Load Materials
@@ -609,8 +595,7 @@ public:
       }
     }
 
-    if (LoadedMeshes.empty() && LoadedVertices.empty() &&
-        LoadedIndices.empty()) {
+    if (LoadedMeshes.empty() && LoadedVertices.empty() && LoadedIndices.empty()) {
       return false;
     } else {
       return true;
@@ -629,11 +614,8 @@ public:
 private:
   // Generate vertices from a list of positions,
   //	tcoords, normals and a face line
-  void GenVerticesFromRawOBJ(std::vector<Vertex> &oVerts,
-                             const std::vector<Vector3> &iPositions,
-                             const std::vector<Vector2> &iTCoords,
-                             const std::vector<Vector3> &iNormals,
-                             const std::string &icurline) {
+  void GenVerticesFromRawOBJ(std::vector<Vertex> &oVerts, const std::vector<Vector3> &iPositions,
+      const std::vector<Vector2> &iTCoords, const std::vector<Vector3> &iNormals, const std::string &icurline) {
     std::vector<std::string> sface, svert;
     Vertex vVert;
     algorithm::split(algorithm::tail(icurline), sface, " ");
@@ -728,8 +710,7 @@ private:
 
   // Triangulate a list of vertices into a face by printing
   //	inducies corresponding with triangles within it
-  void VertexTriangluation(std::vector<unsigned int> &oIndices,
-                           const std::vector<Vertex> &iVerts) {
+  void VertexTriangluation(std::vector<unsigned int> &oIndices, const std::vector<Vertex> &iVerts) {
     // If there are 2 or less verts,
     // no triangle can be created,
     // so exit
@@ -798,8 +779,7 @@ private:
 
           Vector3 tempVec;
           for (auto &tVert : tVerts) {
-            if (tVert.Position != pCur.Position &&
-                tVert.Position != pPrev.Position &&
+            if (tVert.Position != pCur.Position && tVert.Position != pPrev.Position &&
                 tVert.Position != pNext.Position) {
               tempVec = tVert.Position;
               break;
@@ -821,8 +801,7 @@ private:
         }
 
         // If Vertex is not an interior vertex
-        float angle = math::AngleBetweenV3(pPrev.Position - pCur.Position,
-                                           pNext.Position - pCur.Position) *
+        float angle = math::AngleBetweenV3(pPrev.Position - pCur.Position, pNext.Position - pCur.Position) *
                       (180 / 3.14159265359);
         if (angle <= 0 && angle >= 180)
           continue;
@@ -830,11 +809,8 @@ private:
         // If any vertices are within this triangle
         bool inTri = false;
         for (const auto &iVert : iVerts) {
-          if (algorithm::inTriangle(iVert.Position, pPrev.Position,
-                                    pCur.Position, pNext.Position) &&
-              iVert.Position != pPrev.Position &&
-              iVert.Position != pCur.Position &&
-              iVert.Position != pNext.Position) {
+          if (algorithm::inTriangle(iVert.Position, pPrev.Position, pCur.Position, pNext.Position) &&
+              iVert.Position != pPrev.Position && iVert.Position != pCur.Position && iVert.Position != pNext.Position) {
             inTri = true;
             break;
           }
@@ -993,8 +969,7 @@ private:
         tempMaterial.map_d = algorithm::tail(curline);
       }
       // Bump Map
-      if (algorithm::firstToken(curline) == "map_Bump" ||
-          algorithm::firstToken(curline) == "map_bump" ||
+      if (algorithm::firstToken(curline) == "map_Bump" || algorithm::firstToken(curline) == "map_bump" ||
           algorithm::firstToken(curline) == "bump") {
         tempMaterial.map_bump = algorithm::tail(curline);
       }

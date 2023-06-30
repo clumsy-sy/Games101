@@ -45,7 +45,7 @@ auto random_checkerANDballs() -> hittable_list {
     }
   }
 
-  world.add(std::make_shared<bvh_node>(box, 0, 1));
+  world.add(std::make_shared<bvh_node>(box));
 
   auto material1 = std::make_shared<dielectric>(1.5);
   world.add(std::make_shared<sphere>(point3(0, 1, 0), 1.0, material1));

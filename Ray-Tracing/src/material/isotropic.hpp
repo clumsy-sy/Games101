@@ -1,7 +1,6 @@
 #ifndef ISOTROPIC_HPP
 #define ISOTROPIC_HPP
 
-
 #include "../geometry/hittable.hpp"
 #include "../texture/texture.hpp"
 #include "../texture/solid_color.hpp"

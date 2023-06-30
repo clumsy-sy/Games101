@@ -11,6 +11,7 @@
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
 #define STB_IMAGE_IMPLEMENTATION
+// auto stbi_load(char const *filename, int *x, int *y, int *channels_in_file, int desired_channels) -> unsigned char *;
 #include "stb_image.hpp"
 
 #pragma GCC diagnostic pop

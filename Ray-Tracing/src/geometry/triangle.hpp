@@ -2,8 +2,9 @@
 #define TRIANGLE_HPP
 
 #include <utility>
-
+#include <iostream>
 #include "hittable.hpp"
+
 class triangle : public hittable {
 public:
   /*
@@ -27,8 +28,13 @@ public:
     e2 = v2 - v0;
     normal = unit_vector(cross(e1, e2));
   }
+  ~triangle() = default;
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
   auto bounding_box(aabb &output_box) const -> bool override;
+
+  friend auto operator<<(std::ostream &os, const triangle &t) -> std::ostream & {
+    return os << "v0 : " << t.v0 << ", v1 " << t.v1 << ", v2 " << t.v2;
+  }
 };
 // Möller Trumbore Algorithm 同时求 光线与三角形的交与 u，v
 auto triangle::hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool {
@@ -51,9 +57,9 @@ auto triangle::hit(const ray &r, double t_min, double t_max, hit_record &rec) co
   return true;
 }
 
-auto triangle::bounding_box(aabb &output_box) const -> bool{
+auto triangle::bounding_box(aabb &output_box) const -> bool {
+  output_box = surrounding_box(surrounding_box(v0, v1), v2);
   return true;
-
 }
 
 #endif
