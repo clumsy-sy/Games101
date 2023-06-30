@@ -1,8 +1,6 @@
 #ifndef TRIANGLE_HPP
 #define TRIANGLE_HPP
 
-#include <utility>
-#include <iostream>
 #include "hittable.hpp"
 
 class triangle : public hittable {

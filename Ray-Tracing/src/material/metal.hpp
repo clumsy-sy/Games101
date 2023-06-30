@@ -1,8 +1,6 @@
 #ifndef METAL_HPP
 #define METAL_HPP
 
-#include <utility>
-
 #include "material.hpp"
 #include "../vector/Vec3dx4.hpp"
 #include "../geometry/hittable.hpp"

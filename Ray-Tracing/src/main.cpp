@@ -1,3 +1,4 @@
+#include "global.hpp"
 #include "scene/scene.hpp"
 #include "camera/camera.hpp"
 #include "renderer/Renderer.hpp"

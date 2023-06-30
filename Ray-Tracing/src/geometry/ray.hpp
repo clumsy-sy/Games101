@@ -1,8 +1,6 @@
 #ifndef RAY_HPP
 #define RAY_HPP
 
-#include <utility>
-
 #include "../vector/Vec3dx4.hpp"
 class ray {
 public:

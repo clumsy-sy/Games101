@@ -1,8 +1,6 @@
 #ifndef LAMBERTIAN_HPP
 #define LAMBERTIAN_HPP
 
-#include <utility>
-
 #include "material.hpp"
 #include "../texture/texture.hpp"
 #include "../texture/solid_color.hpp"

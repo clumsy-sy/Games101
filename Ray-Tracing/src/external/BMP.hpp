@@ -8,15 +8,9 @@
   输出 bmp 格式的图像 !! bmp 是（ b, g, r) 暂时只支持 24
   位格式，由于需要对齐，所以现在的宽度需要是 4 的倍数(偷懒了)
 */
+
+#include "../global.hpp"
 #include "../vector/Vec3dx4.hpp"
-#include <array>
-#include <cassert>
-#include <cstdint>
-#include <fstream>
-#include <iostream>
-#include <span>
-#include <string>
-#include <vector>
 
 namespace bmp {
 struct BMP_FILE_HEADER {

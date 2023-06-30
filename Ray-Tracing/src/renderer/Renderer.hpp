@@ -1,13 +1,7 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
-#include <cmath>
-#include <cstdint>
-#include <functional>
-#include <vector>
-#include <future>
-#include <utility>
-
+#include "../global.hpp"
 #include "../external/BMP.hpp"
 #include "../camera/camerabase.hpp"
 #include "../geometry/hittablelist.hpp"

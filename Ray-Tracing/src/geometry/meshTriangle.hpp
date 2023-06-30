@@ -1,13 +1,12 @@
 #ifndef MESHTRIANGLE_hpp
 #define MESHTRIANGLE_hpp
 
+#include "../global.hpp"
 #include "hittable.hpp"
 #include "triangle.hpp"
 
 #include "../external/OBJ_Loader.hpp"
 #include "../material/lambertian.hpp"
-#include <cassert>
-#include <array>
 
 class MeshTriangle : public hittable {
 public:

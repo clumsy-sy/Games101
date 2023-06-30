@@ -3,9 +3,6 @@
 
 #include "hittable.hpp"
 
-#include <memory>
-#include <vector>
-
 class hittable_list : public hittable {
 public:
   std::vector<std::shared_ptr<hittable>> objects;

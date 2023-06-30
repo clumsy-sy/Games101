@@ -1,9 +1,8 @@
 #ifndef PERLIN_HPP
 #define PERLIN_HPP
 
-#include "../vector/Vec3dx4.hpp"
 #include "../global.hpp"
-#include <array>
+#include "../vector/Vec3dx4.hpp"
 
 class perlin {
 private:

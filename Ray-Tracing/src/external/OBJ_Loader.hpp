@@ -9,11 +9,7 @@
 #ifndef RASTERIZER_OBJ_LOADER_H
 #define RASTERIZER_OBJ_LOADER_H
 
-#include <cmath>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
+#include "../global.hpp"
 
 // Print progress to console while loading (large models)
 #define OBJL_CONSOLE_OUTPUT
