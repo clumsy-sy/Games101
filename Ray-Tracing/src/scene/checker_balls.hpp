@@ -1,6 +1,7 @@
 #ifndef CHECKER_BALLS_HPP
 #define CHECKER_BALLS_HPP
 
+#include "../global.hpp"
 #include "../material/dielectric.hpp"
 #include "../material/lambertian.hpp"
 #include "../material/metal.hpp"
@@ -8,7 +9,6 @@
 #include "../geometry/sphere.hpp"
 #include "../geometry/BVH.hpp"
 #include "../texture/checker_texture.hpp"
-#include <memory>
 
 auto random_checkerANDballs() -> hittable_list {
   hittable_list world;

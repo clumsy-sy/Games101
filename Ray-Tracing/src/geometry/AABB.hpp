@@ -1,8 +1,6 @@
 #ifndef AABB_HPP
 #define AABB_HPP
 
-#include <utility>
-
 #include "../vector/Vec3dx4.hpp"
 #include "ray.hpp"
 

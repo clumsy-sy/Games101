@@ -1,13 +1,13 @@
 #ifndef BALLS_WORLD_HPP
 #define BALLS_WORLD_HPP
 
+#include "../global.hpp"
 #include "../material/dielectric.hpp"
 #include "../material/lambertian.hpp"
 #include "../material/metal.hpp"
 #include "../geometry/hittablelist.hpp"
 #include "../geometry/sphere.hpp"
 #include "../geometry/BVH.hpp"
-#include <memory>
 
 auto random_balls_world() -> hittable_list {
   hittable_list world;

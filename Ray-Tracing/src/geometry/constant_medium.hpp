@@ -1,8 +1,6 @@
 #ifndef CONSTANT_MEDIUM_HPP
 #define CONSTANT_MEDIUM_HPP
 
-#include <utility>
-
 #include "../global.hpp"
 #include "hittable.hpp"
 #include "../material/material.hpp"

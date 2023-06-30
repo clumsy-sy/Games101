@@ -27,8 +27,7 @@
 
 #ifndef _simd_hpp_
 #define _simd_hpp_
-#include <type_traits>
-#include <cmath>
+#include "../global.hpp"
 
 template <class T, unsigned int N>
 class simd {

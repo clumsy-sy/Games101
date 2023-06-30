@@ -3,7 +3,6 @@
 
 #include "../global.hpp"
 #include "hittablelist.hpp"
-#include <algorithm>
 
 inline auto box_compare(const std::shared_ptr<hittable> &a, const std::shared_ptr<hittable> &b, int axis) -> bool;
 inline auto box_x_compare(const std::shared_ptr<hittable> &a, const std::shared_ptr<hittable> &b) -> bool;

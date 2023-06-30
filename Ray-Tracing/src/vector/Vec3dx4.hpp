@@ -1,10 +1,8 @@
 #ifndef VECTOR3DX4_HPP
 #define VECTOR3DX4_HPP
+
 #include "../global.hpp"
 #include "../external/simd.hpp"
-
-#include <cmath>
-#include <iostream>
 /*
   向量
 */
