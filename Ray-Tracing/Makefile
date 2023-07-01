@@ -1,12 +1,4 @@
-fmt:
-	clang-format -i `find src -name '*.cpp'`
-	clang-format -i `find src -name '*.hpp'`
 
-clean:
-	cd src/build && rm -rf *
-
-bpy:
-	python3 build.py
 
 pre-build:
 	g++ -c src/external/rtw_stb_image.cpp -o build/stb_image.o -O3 -march=native -std=c++20  -Wall -Wextra
@@ -17,15 +9,3 @@ pre-build:
 build:
 	g++ -c src/main.cpp -o build/RayTracing.o -O3 -march=native -std=c++20  -Wall -Wextra
 	g++ build/RayTracing.o build/stb_image.o -o build/RayTracing
-
-debug:
-	g++ src/main.cpp -o build/RayTracing -O3 -march=native -std=c++20
-
-move:
-	mv *.bmp images/
-
-run:
-	./build/RayTracing
-
-convert:
-	convert  xxx.jpg  xxx.png

@@ -17,7 +17,8 @@ public:
     objects.clear();
   }
   void add(const std::shared_ptr<hittable> &object) {
-    objects.push_back(object);
+    // objects.push_back(object);
+    objects.emplace_back(object);
   }
 
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;

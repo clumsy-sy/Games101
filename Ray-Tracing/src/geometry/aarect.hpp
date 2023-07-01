@@ -1,7 +1,6 @@
 #ifndef AARECT_HPP
 #define AARECT_HPP
 
-
 #include "hittable.hpp"
 // 在 xy 屏幕上的矩形，z 固定
 class xy_rect : public hittable {

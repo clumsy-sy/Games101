@@ -63,8 +63,8 @@ public:
     auto action = [&](uint32_t jl, uint32_t jr) -> void {
       for (uint32_t j = jl; j < jr; ++j) {
         for (uint32_t i = 0; i < image_width; ++i) {
-          // color pixel_color = simple_random_sampling(i, j);
-          color pixel_color = sqrt_random_sampling(i, j);
+          color pixel_color = simple_random_sampling(i, j);
+          // color pixel_color = sqrt_random_sampling(i, j);
           photo.set(i, j, pixel_color, samples_per_pixel);
         }
         cout_mutex.lock();
@@ -96,6 +96,7 @@ public:
       // res += ray_color(r, world, max_depth);
       res += ray_color(r, background, world, max_depth);
     }
+    // std::cout << "sample complete" << std::endl;
     return res;
   }
   inline auto sqrt_random_sampling(uint32_t i, uint32_t j) -> color {

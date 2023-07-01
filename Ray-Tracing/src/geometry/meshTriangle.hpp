@@ -2,16 +2,18 @@
 #define MESHTRIANGLE_hpp
 
 #include "../global.hpp"
+#include "BVH.hpp"
 #include "hittable.hpp"
 #include "triangle.hpp"
 
 #include "../external/OBJ_Loader.hpp"
 #include "../material/lambertian.hpp"
+#include <memory>
 
 class MeshTriangle : public hittable {
 public:
-  std::vector<std::shared_ptr<triangle>> triangles;
-  // std::vector<triangle> triangles;
+  // std::vector<std::shared_ptr<triangle>> triangles;
+  hittable_list triangles;
   aabb box;
 
 public:
@@ -19,9 +21,9 @@ public:
   MeshTriangle(const std::string &filename) {
     objl::Loader loader;
     loader.LoadFile(filename);
-
     assert(loader.LoadedMeshes.size() == 1);
     auto mesh = loader.LoadedMeshes[0];
+    std::cout << mesh.Vertices.size() / 3 << std::endl;
 
     Vec3d min_vert = Vec3d{std::numeric_limits<float>::infinity(), std::numeric_limits<float>::infinity(),
         std::numeric_limits<float>::infinity()};
@@ -42,20 +44,24 @@ public:
       }
 
       auto mat_ptr = std::make_shared<lambertian>(color(0.5, 0.5, 0.5));
-      triangles.emplace_back(std::make_shared<triangle>(face_vertices[0], face_vertices[1], face_vertices[2], mat_ptr));
+      // auto mat_ptr = std::make_shared<lambertian>(color(.12, .45, .15));
+      triangles.add(std::make_shared<triangle>(face_vertices[0], face_vertices[1], face_vertices[2], mat_ptr));
     }
     box = aabb(min_vert, max_vert);
   }
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
   auto bounding_box(aabb &output_box) const -> bool override;
   friend auto operator<<(std::ostream &os, const MeshTriangle &m) -> std::ostream & {
-    for (auto const &t : m.triangles) {
+    for (auto const &t : m.triangles.objects) {
       os << t << "\n";
     }
     return os;
   }
 };
-auto MeshTriangle::hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool {}
+auto MeshTriangle::hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool {
+  auto tree = std::make_shared<bvh_node>(triangles);
+  return tree->hit(r, t_min, t_max, rec);
+}
 
 auto MeshTriangle::bounding_box(aabb &output_box) const -> bool {
   output_box = box;

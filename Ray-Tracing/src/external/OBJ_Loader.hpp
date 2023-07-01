@@ -437,7 +437,7 @@ public:
           }
         }
 #ifdef OBJL_CONSOLE_OUTPUT
-        std::cout << std::endl;
+        // std::cout << std::endl;
         outputIndicator = 0;
 #endif
       }
@@ -561,7 +561,7 @@ public:
     }
 
 #ifdef OBJL_CONSOLE_OUTPUT
-    std::cout << std::endl;
+    // std::cout << std::endl;
 #endif
 
     // Deal with last mesh
@@ -621,7 +621,7 @@ private:
     // For every given vertex do this
     for (auto &i : sface) {
       // See What type the vertex is.
-      int vtype;
+      int vtype = 0;
 
       algorithm::split(i, svert, "/");
 

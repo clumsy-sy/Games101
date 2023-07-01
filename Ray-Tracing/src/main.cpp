@@ -1,4 +1,3 @@
-#include "global.hpp"
 #include "scene/scene.hpp"
 #include "camera/camera.hpp"
 #include "renderer/Renderer.hpp"
@@ -15,7 +14,7 @@ auto main(int argc, const char **argv) -> int {
   point3 lookfrom, lookat;
   color background;
   double vfov = 20.0;
-  auto world = choose_scene(7, aspect_ratio, image_width, vfov, lookfrom, lookat, background);
+  auto world = choose_scene(9, aspect_ratio, image_width, vfov, lookfrom, lookat, background);
 
   // Camera
   Vec3d vup(0, 1, 0);
@@ -27,7 +26,8 @@ auto main(int argc, const char **argv) -> int {
   Renderer<camera> renderer(world, aspect_ratio, image_width);
   renderer.set_camera(cam);
   renderer.set_photo_name(photoname);
-  renderer.set_samples_per_pixel(400);
+  renderer.set_samples_per_pixel(64);
+  renderer.set_max_depth(5);
   renderer.set_background(background);
   renderer.render();
 

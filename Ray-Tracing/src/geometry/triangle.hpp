@@ -26,7 +26,7 @@ public:
     e2 = v2 - v0;
     normal = unit_vector(cross(e1, e2));
   }
-  ~triangle() = default;
+  ~triangle() override = default;
   auto hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool override;
   auto bounding_box(aabb &output_box) const -> bool override;
 
@@ -38,12 +38,15 @@ public:
 auto triangle::hit(const ray &r, double t_min, double t_max, hit_record &rec) const -> bool {
   auto s = r.orig - v0;
   auto s1 = cross(r.dir, e2);
-  auto s2 = cross(s, r.orig);
-  auto t = dot(s2, e2) / dot(s1, e1);
-  auto u = dot(s1, s) / dot(s1, e1);
-  auto v = dot(s2, r.dir) / dot(s1, e1);
+  auto s2 = cross(s, e1);
+  auto D = dot(s1, e1);
+  if(std::abs(D) < esp) return false;
+  D = 1 / D;
+  auto t = dot(s2, e2) * D;
+  auto u = dot(s1, s) * D;
+  auto v = dot(s2, r.dir) * D;
 
-  if (t < t_min || t > t_max)
+  if (t < t_min || t > t_max || u < esp || v < esp || 1-u-v < esp)
     return false;
 
   rec.t = t;
