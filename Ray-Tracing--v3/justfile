@@ -1,0 +1,42 @@
+fmt:
+	clang-format -i `find src -name '*.cpp'`
+	clang-format -i `find src -name '*.hpp'`
+
+clean:
+	cd src/build && rm -rf *
+
+bpy:
+	python3 build.py
+
+pre-build:
+	g++ -c src/external/rtw_stb_image.cpp -o build/stb_image.o -O3 -march=native -std=c++20  -Wall -Wextra
+	g++ src/Vec3dx4.hpp -O3 -march=native -std=c++20  -Wall -Wextra
+	g++ src/global.hpp -O3 -march=native -std=c++20  -Wall -Wextra
+
+build:
+	g++ -c src/main.cpp -o build/RayTracing.o -O3 -march=native -std=c++20  -Wall -Wextra
+	g++ build/RayTracing.o build/stb_image.o -o build/RayTracing
+
+# build:
+# 	g++ src/main.cpp -o build/RayTracing -O3 -march=native -std=c++20  -Wall -Wextra
+
+debug:
+	g++ src/main.cpp -o build/RayTracing -O3 -march=native -std=c++20
+
+move:
+	mv *.bmp images/
+
+run:
+	./build/RayTracing
+
+run10:
+	./build/RayTracing Fphoto1.bmp
+	./build/RayTracing Fphoto2.bmp
+	./build/RayTracing Fphoto3.bmp
+	./build/RayTracing Fphoto4.bmp
+	./build/RayTracing Fphoto5.bmp
+	./build/RayTracing Fphoto6.bmp
+	./build/RayTracing Fphoto7.bmp
+	./build/RayTracing Fphoto8.bmp
+	./build/RayTracing Fphoto9.bmp
+	./build/RayTracing Fphoto10.bmp
